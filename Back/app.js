@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
 app.use('/api/register', apiusers);
+app.use('/api', apiusers);
 
 // Página de bienvenida
 app.get('/', (req, res) => {

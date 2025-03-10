@@ -22,14 +22,13 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
-        const user = await User.findByPk(req.params.id);
-        if (user) {
-            res.json(user);
-        } else {
-            res.status(404).send('Usuario no trobado');
-        }
+        const { username, password } = req.body;
+        const user = await User.findOne({
+            where: { username: username, password: password }
+        });
+        res.status(201).json("Success");
     } catch (error) {
         res.status(500).send(error.message);
     }
