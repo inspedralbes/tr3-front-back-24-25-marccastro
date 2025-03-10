@@ -26,11 +26,16 @@ router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne({
-            where: { username: username, password: password }
+            where: { username: username }
         });
-        res.status(201).json("Success");
+
+        if (user.password === password) {
+            return res.json({ message: "success" }); // Esto es un JSON válido
+        } else {
+            return res.json({ message: "failed" });
+        }
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: error.message });
     }
 });
 
