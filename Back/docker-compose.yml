@@ -19,7 +19,7 @@ services:
     env_file:
       - .env  # <-- Carga todas las variables desde .env
     ports:
-      - "3000:3000"
+      - "3001:3001"
     depends_on:
       - mysql
     volumes:

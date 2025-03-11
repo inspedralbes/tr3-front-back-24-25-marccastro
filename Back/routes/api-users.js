@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
         await User.create({ username, email, password, level: 0 });
-        res.status(201).json("Nuevo usuario añadido");
+        res.json({ message: "success" });
     } catch (error) {
         res.status(500).send(error.message);
     }
