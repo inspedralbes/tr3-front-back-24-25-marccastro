@@ -13,6 +13,7 @@
     "@mdi/font": "7.4.47",
     "roboto-fontface": "*",
     "socket": "^0.14.57",
+    "socket.io-client": "^4.8.1",
     "vue": "^3.4.31",
     "vuetify": "^3.6.14"
   },
