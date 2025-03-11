@@ -1,0 +1,54 @@
+services:
+  # Contenedor de MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    env_file:
+      - ./Back/.env  # <-- Carga las variables desde .env
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword  # Contraseña para el root de MySQL
+    ports:
+      - "3306:3306"  # Mapea el puerto 3306 del contenedor al host
+    volumes:
+      - mysql_data:/var/lib/mysql  # Volumen para persistir datos
+
+  # Contenedor de Node.js (Backend)
+  app:
+    build: ./Back  # Se especifica la carpeta donde está el Dockerfile
+    container_name: node_app
+    restart: always
+    env_file:
+      - ./Back/.env  # Carga las variables desde .env
+    ports:
+      - "3001:3001"  # Mapea el puerto 3001 del contenedor al host
+    depends_on:
+      - mysql  # Asegura que MySQL esté disponible antes de iniciar el app
+    volumes:
+      - ./Back:/app  # Mapea el código del backend al contenedor
+      - /app/node_modules  # Volumen para preservar las dependencias
+    command: npm run dev  # Comando para ejecutar el app en modo desarrollo
+
+  # Contenedor de Vuetify (Frontend)
+  frontend:
+    build: ./Front/vuetify-boxhead  # Ruta al Dockerfile de Vuetify
+    container_name: vuetify_frontend
+    restart: always
+    ports:
+      - "7000:7000"  # Mapea el puerto 5170 del contenedor al host
+    volumes:
+      - ./Front/vuetify-boxhead:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev  # Inicia la aplicación Vue.js en modo desarrollo
+
+  # Contenedor de Adminer (Interfaz para gestionar la base de datos)
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"  # Adminer será accesible en http://localhost:8080
+
+volumes:
+  mysql_data:

@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exposem el port de l'aplicació
-EXPOSE 3000
+EXPOSE 3001
 
 # Instal·lem nodemon com a dependència global per al desenvolupament
 RUN npm install -g nodemon
