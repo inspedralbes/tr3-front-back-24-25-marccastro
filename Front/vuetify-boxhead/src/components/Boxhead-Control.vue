@@ -16,8 +16,9 @@
                   Ajusta los atributos de los personajes en tiempo real.
                 </v-card-subtitle>
                 <v-card-text>
-                  <v-slider v-model="speed" label="Speed" :min="1" :max="10" step="1" thumb-label></v-slider>
-                  <v-slider v-model="damage" label="Damage" :min="1" :max="10" step="1" thumb-label></v-slider>
+                  <v-slider v-model="health" label="Health" :min="0" :max="100" step="0" thumb-label></v-slider>
+                  <v-slider v-model="speed" label="Speed" :min="0" :max="10" step="0" thumb-label></v-slider>
+                  <v-slider v-model="damage" label="Damage" :min="10" :max="100" step="5" thumb-label></v-slider>
   
                   <v-select v-model="sprite" :items="sprites" label="Sprite"></v-select>
                 </v-card-text>
@@ -36,13 +37,13 @@
   import { ref } from 'vue';
   import { functionSocket } from '../services/socketManager';
   
+  const health = ref(0);
   const speed = ref(0);
   const damage = ref(0);
   const sprite = ref(null);
   const sprites = ref(['Sprite1', 'Sprite2', 'Sprite3']);
   
   const updateCharacter = () => {
-    console.log(speed.value);
-    functionSocket(speed, damage);
+    functionSocket(health, speed, damage);
   }
   </script>
