@@ -2,8 +2,7 @@
 import express from "express";
 import path from "path";
 import { createServer } from "http";
-import { Server } from "socket.io";
-import cors from "cors";
+import { WebSocketServer } from "ws"; // WebSocket nativo en Node.js
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
 import { sequelize } from "./models/index.js";
@@ -21,27 +20,46 @@ const __dirname = path.dirname(__filename);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors());
-
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
 
 // Rutas
 app.use("/api", apiusers);
 
-// Sockets
-io.on("connection", (socket) => {
-  console.log("A user connected", socket.id);
+// Servidor WebSocket
+const wss = new WebSocketServer({ server });
 
-  socket.on("updateCharacter", (update) => {
-    console.log(update);
+const clients = [];
+
+wss.on("connection", (ws) => {
+  console.log("Un cliente se ha conectado");
+  clients.push(ws);
+
+  ws.on("message", (message) => {
+    // Si el mensaje es un Buffer (datos binarios), convertirlo a cadena
+    if (Buffer.isBuffer(message)) {
+      message = message.toString();  // Convierte el Buffer a una cadena
+    }
+
+    try {
+      const data = JSON.parse(message); // Convertimos el mensaje en JSON
+
+      console.log("Datos recibidos:", data); // Debug
+
+      // Aquí puedes hacer algo con los datos (ej: actualizar BD, broadcast a otros clientes)
+      // Puedes enviar un mensaje al cliente Unity de la misma manera que a los clientes web
+      clients.forEach(client => {
+        client.send(JSON.stringify(data)); // Enviar a todos los clientes
+      });
+    } catch (error) {
+      console.error("Error al procesar mensaje:", error);
+    }
   });
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected", socket.id);
+  ws.on("close", () => {
+    console.log("Un cliente se ha desconectado");
+    const index = clients.indexOf(ws);
+    if (index !== -1) {
+      clients.splice(index, 1);
+    }
   });
 });
 
