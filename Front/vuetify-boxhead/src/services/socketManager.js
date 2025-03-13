@@ -5,7 +5,7 @@ socket.onopen = () => {
     console.log("Conectado al servidor WebSocket");
 };
 
-export const functionSocket = (newHealth, newSpeed, newDamage) => {
+export const functionSocket = (enemyName, newHealth, newSpeed, newDamage) => {
   if (socket.readyState === WebSocket.OPEN) {
     console.log("Enviado");
     const data = { health: newHealth.value, speed: newSpeed.value, damage: newDamage.value }; 
