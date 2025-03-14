@@ -25,17 +25,22 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        const user = await User.findOne({
-            where: { username: username }
-        });
 
-        if (user.password === password) {
-            return res.json({ message: "success" }); // Esto es un JSON válido
-        } else {
-            return res.json({ message: "failed" });
-        }
+        console.log(username, password);
+
+        const user = await User.findOne({ where: { username } });
+
+        console.log(user);
+
+        if (!user || user.password !== password) {
+            return res.status(401).json({ message: "Usuario o contraseña incorrectos" });
+        }        
+
+        return res.status(200).json({ message: "success" });
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error en login:", error);
+        return res.status(500).json({ message: "Error interno del servidor" });
     }
 });
 
