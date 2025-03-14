@@ -15,10 +15,27 @@ router.get('/', async (req, res) => {
 router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
-        await User.create({ username, email, password, level: 0 });
-        res.json({ message: "success" });
+
+        // Verificar si el usuario ya existe
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.json({ message: "Ya existe un usuario con ese nombre" });
+        }
+
+        // Verificar si el email ya está registrado
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+            return res.json({ message: "El correo electrónico ya está en uso" });
+        }
+
+        // Crear el usuario
+        await User.create({ username, email, password: password, level: 0 });
+
+        return res.status(201).json({ message: "Success" });
+
     } catch (error) {
-        res.status(500).send(error.message);
+        console.error("Error en el registro:", error);
+        return res.status(500).json({ message: "Error interno del servidor" });
     }
 });
 
@@ -30,10 +47,10 @@ router.post('/login', async (req, res) => {
 
         const user = await User.findOne({ where: { username } });
 
-        console.log(user);
+        user ? console.log("Existe") : console.log("No existe");
 
         if (!user || user.password !== password) {
-            return res.status(401).json({ message: "Usuario o contraseña incorrectos" });
+            return res.json({ message: "Usuario o contraseña incorrectos" });
         }        
 
         return res.status(200).json({ message: "success" });

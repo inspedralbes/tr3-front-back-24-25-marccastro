@@ -49,7 +49,8 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 7000,
+    port: 7001,
+    host:'0.0.0.0'
   },
   css: {
     preprocessorOptions: {

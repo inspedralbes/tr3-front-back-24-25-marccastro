@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exponemos el puerto en el que la aplicación corre (default: 8080)
-EXPOSE 7000
+EXPOSE 7001
 
 # Comando para iniciar la aplicación en modo de desarrollo
 CMD ["npm", "run", "dev"]

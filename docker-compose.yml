@@ -15,7 +15,9 @@ services:
 
   # Contenedor de Node.js (Backend)
   app:
-    build: ./Back  # Se especifica la carpeta donde está el Dockerfile
+    build: 
+      context: ./Back  # Se especifica la carpeta donde está el Dockerfile
+      dockerfile: dockerfile.Node
     container_name: node_app
     restart: always
     env_file:
@@ -27,21 +29,21 @@ services:
     volumes:
       - ./Back:/app  # Mapea el código del backend al contenedor
       - /app/node_modules  # Volumen para preservar las dependencias
-    command: npm run dev  # Comando para ejecutar el app en modo desarrollo
 
   # Contenedor de Vuetify (Frontend)
   frontend:
-    build: ./Front/vuetify-boxhead  # Ruta al Dockerfile de Vuetify
+    build: 
+      context: ./Front/vuetify-boxhead  # Ruta al Dockerfile de Vuetify
+      dockerfile: Dockerfile.vuetify
     container_name: vuetify_frontend
     restart: always
     ports:
-      - "7000:7000"  # Mapea el puerto 5170 del contenedor al host
+      - "7001:7001"  # Mapea el puerto 5170 del contenedor al host
     volumes:
       - ./Front/vuetify-boxhead:/app
       - /app/node_modules
     working_dir: /app
-    command: npm run dev  # Inicia la aplicación Vue.js en modo desarrollo
-
+   
   # Contenedor de Adminer (Interfaz para gestionar la base de datos)
   adminer:
     image: adminer
