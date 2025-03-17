@@ -5,10 +5,10 @@ socket.onopen = () => {
     console.log("Conectado al servidor WebSocket");
 };
 
-export const functionSocket = (enemy, newHealth, newSpeed, newDamage) => {
+export const functionSocket = (character, newHealth, newSpeed, newDamage) => {
   if (socket.readyState === WebSocket.OPEN) {
     console.log("Enviado");
-    const data = { name: enemy.value, health: newHealth.value, speed: newSpeed.value, damage: newDamage.value }; 
+    const data = { name: character.value, health: newHealth.value, speed: newSpeed.value, damage: newDamage.value }; 
     socket.send(JSON.stringify(data));
   } else {
     console.error("WebSocket no está conectado.");

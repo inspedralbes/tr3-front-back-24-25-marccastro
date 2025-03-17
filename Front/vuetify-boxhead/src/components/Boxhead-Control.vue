@@ -16,7 +16,7 @@
                 Ajusta los atributos de los personajes en tiempo real.
               </v-card-subtitle>
               <v-card-text>
-                <v-select v-model="selectedEnemy" :items="enemies" label="Seleccionar Enemigo" outlined></v-select>
+                <v-select v-model="selectedCharacter" :items="characters" label="Seleccionar Personaje" outlined></v-select>
                 <v-slider v-model="health" label="Health" :min="1" :max="100" step="1" thumb-label></v-slider>
                 <v-slider v-model="speed" label="Speed" :min="1" :max="10" step="0" thumb-label></v-slider>
                 <v-slider v-model="damage" label="Damage" :min="10" :max="100" step="5" thumb-label></v-slider>
@@ -40,12 +40,12 @@ import { functionSocket } from '../services/socketManager';
 const health = ref(0);
 const speed = ref(0);
 const damage = ref(0);
-const selectedEnemy = ref(null); // Nombre del enemigo seleccionado
-const enemies = ref(['Zombie', 'DogZombie']); // Enemigos disponibles
+const selectedCharacter = ref(null); // Nombre del enemigo seleccionado
+const characters = ref(['Player', 'Zombie', 'DogZombie']);
 const sprite = ref(null);
 const sprites = ref(['Sprite1', 'Sprite2', 'Sprite3']);
 
 const updateCharacter = () => {
-  functionSocket(selectedEnemy, health, speed, damage);
+  functionSocket(selectedCharacter, health, speed, damage);
 }
 </script>
