@@ -13,19 +13,35 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql  # Volumen para persistir datos
 
+  # Contenedor de MongoDB
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    env_file:
+      - ./Back/.env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: adminpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
   # Contenedor de Node.js (Backend)
   app:
     build: 
       context: ./Back  # Se especifica la carpeta donde está el Dockerfile
-      dockerfile: dockerfile.Node
+      dockerfile: Dockerfile.Node
     container_name: node_app
     restart: always
     env_file:
       - ./Back/.env  # Carga las variables desde .env
     ports:
-      - "3001:3001"  # Mapea el puerto 3001 del contenedor al host
+      - "3002:3002"  # Mapea el puerto 3001 del contenedor al host
     depends_on:
       - mysql  # Asegura que MySQL esté disponible antes de iniciar el app
+      - mongodb
     volumes:
       - ./Back:/app  # Mapea el código del backend al contenedor
       - /app/node_modules  # Volumen para preservar las dependencias
@@ -54,3 +70,4 @@ services:
 
 volumes:
   mysql_data:
+  mongodb_data:
