@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const StatsSchema = new mongoose.Schema({
     kills: { type: Number, required: true },
@@ -7,4 +7,6 @@ const StatsSchema = new mongoose.Schema({
     timeStamp: true
 });
 
-module.exports = mongoose.model('Stats', StatsSchema, 'stat');
+const Stats = mongoose.model("Stats", StatsSchema, "stat");
+
+export default Stats;  // ✅ Exportación en ES Modules

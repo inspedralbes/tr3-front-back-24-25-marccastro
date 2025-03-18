@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import Stats from '../models/stats';
+import Stats from "../models/stats.js";
 
 router.post('/', async (req, res) => {
     try {
