@@ -16,11 +16,43 @@
                 Ajusta los atributos de los personajes en tiempo real.
               </v-card-subtitle>
               <v-card-text>
-                <v-select v-model="selectedCharacter" :items="characters" label="Seleccionar Personaje" outlined></v-select>
-                <v-slider v-model="health" label="Health" :min="1" :max="100" step="1" thumb-label></v-slider>
-                <v-slider v-model="speed" label="Speed" :min="1" :max="10" step="0" thumb-label></v-slider>
-                <v-slider v-model="damage" label="Damage" :min="10" :max="100" step="5" thumb-label></v-slider>
-                <v-select v-model="sprite" :items="sprites" label="Sprite"></v-select>
+                <v-select
+                  v-model="selectedCharacter"
+                  :items="characters"
+                  label="Seleccionar Personaje"
+                  outlined
+                ></v-select>
+                <v-slider
+                  v-model="health"
+                  label="Health"
+                  :min="1"
+                  :max="100"
+                  step="1"
+                  thumb-label
+                ></v-slider>
+                <v-slider
+                  v-model="speed"
+                  label="Speed"
+                  :min="1"
+                  :max="10"
+                  step="0.1"
+                  thumb-label
+                ></v-slider>
+                <v-slider
+                  v-model="damage"
+                  label="Damage"
+                  :min="10"
+                  :max="100"
+                  step="5"
+                  thumb-label
+                ></v-slider>
+                <!-- Selector para los colores -->
+                <v-select
+                  v-model="colorName"
+                  :items="colorNames"
+                  label="Color"
+                  outlined
+                ></v-select>
               </v-card-text>
               <v-card-actions>
                 <v-btn @click="updateCharacter">Actualizar Personaje</v-btn>
@@ -37,15 +69,40 @@
 import { ref } from 'vue';
 import { functionSocket } from '../services/socketManager';
 
-const health = ref(0);
-const speed = ref(0);
-const damage = ref(0);
-const selectedCharacter = ref(null); // Nombre del enemigo seleccionado
-const characters = ref(['Player', 'Zombie', 'DogZombie']);
-const sprite = ref(null);
-const sprites = ref(['Sprite1', 'Sprite2', 'Sprite3']);
+// Atributos de control
+const health = ref(50); // Valor predeterminado
+const speed = ref(5); // Valor predeterminado
+const damage = ref(20); // Valor predeterminado
+const selectedCharacter = ref(null); // Nombre del personaje seleccionado
+const characters = ref(['Player', 'Zombie', 'DogZombie']); // Personajes disponibles
+
+// Selector para el color (por nombre)
+const colorName = ref('Rojo'); // Valor predeterminado
+const colorNames = ref(['Rojo', 'Azul', 'Verde']); // Colores por nombre
+
+// Función para convertir el nombre del color a su valor hexadecimal
+const getColorHex = (color) => {
+  switch (color) {
+    case 'Rojo':
+      return 'FF0000';
+    case 'Azul':
+      return '0000FF';
+    case 'Verde':
+      return '008000';
+    default:
+      return 'FFFFFF'; // Blanco como color predeterminado
+  }
+};
 
 const updateCharacter = () => {
-  functionSocket(selectedCharacter, health, speed, damage);
-}
+  if (selectedCharacter.value && colorName.value) {
+    // Convertir el color a hexadecimal
+    const colorHex = getColorHex(colorName.value);
+    
+    // Llamamos a la función para enviar los datos al servidor
+    functionSocket(selectedCharacter, health, speed, damage, colorHex);
+  } else {
+    console.error("Por favor selecciona un personaje y un color.");
+  }
+};
 </script>

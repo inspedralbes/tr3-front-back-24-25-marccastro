@@ -7,6 +7,6 @@ const StatsSchema = new mongoose.Schema({
     timeStamp: true
 });
 
-const Stats = mongoose.model("Stats", StatsSchema, "stat");
+const Stats = mongoose.model("Stats", StatsSchema, "statistics");
 
 export default Stats;  // ✅ Exportación en ES Modules

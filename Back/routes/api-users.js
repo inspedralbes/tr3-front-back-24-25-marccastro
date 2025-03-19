@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
         // Crear el usuario
         await User.create({ username, email, password: password, level: 0 });
 
-        return res.status(201).json({ message: "Success" });
+        return res.status(201).json({ message: "success" });
 
     } catch (error) {
         console.error("Error en el registro:", error);
