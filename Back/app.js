@@ -4,10 +4,12 @@ import path from "path";
 import { createServer } from "http";
 import { WebSocketServer } from "ws"; // WebSocket nativo en Node.js
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { sequelize } from "./models/index.js";
 import apiusers from "./routes/api-users.js";
+import apistats from "./routes/api-stats.js";
 
 dotenv.config();
 const app = express();
@@ -30,10 +32,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connectat a MongoDB'))
+.catch((err) => console.error('Error al connectar a MongoDB', err));
+
 // Rutas
 app.use("/api", apiusers);
 app.use("/api/register/administraction", apiusers);
 app.use("/api/login/administraction", apiusers);
+app.use('/api/stats', apistats);
 
 // Servidor WebSocket
 const wss = new WebSocketServer({ server });

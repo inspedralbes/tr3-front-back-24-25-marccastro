@@ -16,11 +16,43 @@
                 Ajusta los atributos de los personajes en tiempo real.
               </v-card-subtitle>
               <v-card-text>
-                <v-select v-model="selectedCharacter" :items="characters" label="Seleccionar Personaje" outlined></v-select>
-                <v-slider v-model="health" label="Health" :min="1" :max="100" step="1" thumb-label></v-slider>
-                <v-slider v-model="speed" label="Speed" :min="1" :max="10" step="0" thumb-label></v-slider>
-                <v-slider v-model="damage" label="Damage" :min="10" :max="100" step="5" thumb-label></v-slider>
-                <v-select v-model="colorName" :items="colorNames" label="Sprite"></v-select>
+                <v-select
+                  v-model="selectedCharacter"
+                  :items="characters"
+                  label="Seleccionar Personaje"
+                  outlined
+                ></v-select>
+                <v-slider
+                  v-model="health"
+                  label="Health"
+                  :min="1"
+                  :max="100"
+                  step="1"
+                  thumb-label
+                ></v-slider>
+                <v-slider
+                  v-model="speed"
+                  label="Speed"
+                  :min="1"
+                  :max="10"
+                  step="0.1"
+                  thumb-label
+                ></v-slider>
+                <v-slider
+                  v-model="damage"
+                  label="Damage"
+                  :min="10"
+                  :max="100"
+                  step="5"
+                  thumb-label
+                ></v-slider>
+                <!-- Selector para los colores -->
+                <v-select
+                  v-model="colorName"
+                  :items="colorNames"
+                  label="Color"
+                  outlined
+                ></v-select>
               </v-card-text>
               <v-card-actions>
                 <v-btn @click="updateCharacter">Actualizar Personaje</v-btn>

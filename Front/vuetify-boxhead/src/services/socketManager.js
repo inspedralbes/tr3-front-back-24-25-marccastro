@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://localhost:3001");
+const socket = new WebSocket("ws://localhost:3002");
 
 // Evento cuando se conecta
 socket.onopen = () => {
