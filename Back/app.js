@@ -5,12 +5,21 @@ import { createServer } from "http";
 import { WebSocketServer } from "ws"; // WebSocket nativo en Node.js
 import { fileURLToPath } from "url";
 import dotenv from 'dotenv';
+import cors from 'cors';
 import { sequelize } from "./models/index.js";
 import apiusers from "./routes/api-users.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
+const corsOptions = {
+  origin: 'http://localhost:7001',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+
+app.use(cors(corsOptions));
+
 const server = createServer(app); // 🔥 Cambia "http.createServer" por "createServer"
 
 // Configuración de rutas y vistas
@@ -23,6 +32,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Rutas
 app.use("/api", apiusers);
+app.use("/api/register/administraction", apiusers);
+app.use("/api/login/administraction", apiusers);
 
 // Servidor WebSocket
 const wss = new WebSocketServer({ server });

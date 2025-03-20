@@ -17,13 +17,13 @@ services:
   app:
     build: 
       context: ./Back  # Se especifica la carpeta donde está el Dockerfile
-      dockerfile: dockerfile.Node
+      dockerfile: Dockerfile.Node
     container_name: node_app
     restart: always
     env_file:
       - ./Back/.env  # Carga las variables desde .env
     ports:
-      - "3001:3001"  # Mapea el puerto 3001 del contenedor al host
+      - "3002:3002"  # Mapea el puerto 3001 del contenedor al host
     depends_on:
       - mysql  # Asegura que MySQL esté disponible antes de iniciar el app
     volumes:

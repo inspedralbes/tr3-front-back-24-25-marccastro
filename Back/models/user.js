@@ -20,9 +20,9 @@ export default (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    level: {
+    admin: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false
     }
   }, {
     tableName: 'users',

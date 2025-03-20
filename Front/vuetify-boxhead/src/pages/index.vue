@@ -1,7 +1,7 @@
 <template>
-  <BoxheadControl />
+  <Auth />
 </template>
 
 <script setup>
-import BoxheadControl from '@/components/Boxhead-Control.vue';
+import Auth from '@/components/Auth.vue';
 </script>
