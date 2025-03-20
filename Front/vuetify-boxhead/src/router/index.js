@@ -1,11 +1,11 @@
 // Composables
 import Auth from '@/components/Auth.vue';
-import BoxheadControl from '@/components/Boxhead-Control.vue';
+import Dashboard from '@/components/Dashboard.vue';
 import { createRouter, createWebHistory } from 'vue-router/auto'
 
 const routes = [
   { path: '/', component: Auth},
-  { path: '/boxhead-control', component: BoxheadControl}
+  { path: '/dashboard', component: Dashboard}
 ];
 
 const router = createRouter({

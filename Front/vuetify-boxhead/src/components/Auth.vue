@@ -117,7 +117,7 @@ const submitForm = async () => {
     if (response.ok) {
       console.log('Respuesta del servidor:', data);
       // alert(isLogin.value ? 'Inicio de sesión exitoso' : 'Registro exitoso');
-      router.push('/boxhead-control');
+      router.push('/dashboard');
     } else {
       console.error('Error en la autenticación:', data);
       alert(data.message || 'Error en la autenticación');

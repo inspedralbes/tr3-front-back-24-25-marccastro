@@ -16,7 +16,7 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
   origin: 'http://localhost:7001',
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 
@@ -43,6 +43,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use("/api", apiusers);
 app.use("/api/register/administraction", apiusers);
 app.use("/api/login/administraction", apiusers);
+app.use("/api/users", apiusers);
+app.use("/api/delete-user", apiusers);
 app.use('/api/stats', apistats);
 
 // Servidor WebSocket

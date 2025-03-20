@@ -4,13 +4,13 @@ import { User } from '../models/index.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    res.json(users);
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
+router.get('/users', async (req, res) => {
+    try {
+        const users = await User.findAll();
+        res.json(users);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
 
 router.post('/register', async (req, res) => {
@@ -101,6 +101,21 @@ router.post('/login/administraction', async (req, res) => {
     } catch (error) {
         console.error("Error en login:", error);
         return res.status(500).json({ message: "Error interno del servidor" });
+    }
+});
+
+router.delete('/delete-user', async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ where: { email }});
+
+        await user.destroy();
+
+        res.status(200).json({ message: 'Usuario eliminado correctamente' });
+    } catch(error) {
+        res.status(500).json({ message: 'Error al eliminar el usuario' })
+        console.error("Error en eliminar el usuario");
     }
 });
 
