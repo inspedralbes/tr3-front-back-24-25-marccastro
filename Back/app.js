@@ -7,8 +7,10 @@ import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import cors from 'cors';
+import fileUpload from 'express-fileupload';
 import { sequelize } from "./models/index.js";
 import apiusers from "./routes/api-users.js";
+import api_items from "./routes/api-items.js";
 import apistats from "./routes/api-stats.js";
 
 dotenv.config();
@@ -16,6 +18,7 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
   origin: 'http://localhost:7001',
+  // origin: '*',
   methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
@@ -28,7 +31,8 @@ const server = createServer(app); // 🔥 Cambia "http.createServer" por "create
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -45,7 +49,8 @@ app.use("/api/register/administraction", apiusers);
 app.use("/api/login/administraction", apiusers);
 app.use("/api/users", apiusers);
 app.use("/api/delete-user", apiusers);
-app.use('/api/stats', apistats);
+app.use("/api/items", api_items);
+app.use("/api/stats", apistats);
 
 // Servidor WebSocket
 const wss = new WebSocketServer({ server });

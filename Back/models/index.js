@@ -15,19 +15,25 @@ const sequelize = new Sequelize(
   }
 );
 
-try {
-  await sequelize.authenticate();
-  console.log('Conexión a la base de datos establecida correctamente.');
-} catch (error) {
-  console.error('Error al conectar con la base de datos:', error);
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Conexión a la base de datos establecida correctamente.');
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
+  }
 }
 
 // Importamos los modelos
 import defineUser from './user.js';
+import defineItem from './item.js'
 
 // Inicializamos los modelos
 const User = defineUser(sequelize);
+const Item = defineItem(sequelize);
+
+connectDB();
 
 // Exportamos la instancia y los modelos
-export { sequelize, User };
+export { sequelize, User, Item };
 export default sequelize;
