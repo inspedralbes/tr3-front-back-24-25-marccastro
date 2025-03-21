@@ -34,7 +34,6 @@ const __dirname = path.dirname(__filename);
 app.use(fileUpload());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,

@@ -3,6 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import { Item } from '../models/index.js';
 
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+
 const router = express.Router();
 
 // Crear la carpeta 'uploads' si no existe
@@ -18,7 +21,7 @@ router.get('/', async (req, res) => {
     try {
         const items = await Item.findAll();
         if(!items) res.status(400).json("No hay items");
-        res.json(items);
+        res.json({ items });
     } catch (error) {
         console.error("Error al obtener los items:", error);
         res.status(500).json({ message: "Error interno del servidor" });
@@ -26,7 +29,7 @@ router.get('/', async (req, res) => {
 });
 
 // Ruta para crear un nuevo producto con imagen
-router.post('/', async (req, res) => {
+router.post('/new-item', async (req, res) => {
     try {
         const { name, price } = req.body;
 
