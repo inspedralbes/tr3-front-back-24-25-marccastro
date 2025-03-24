@@ -53,6 +53,16 @@
                 hint="Máximo 1 MB"
               ></v-file-input>
 
+              <!-- Campo para subir el asset bundler -->
+              <v-file-input
+                v-model="newItem.assetBundleFile"
+                label="Selecciona el Asset Bundler"
+                accept=".bundle,.assetbundle"
+                outlined
+                :show-size="5000"
+                hint="Máximo 5 MB"
+              ></v-file-input>
+
               <!-- Vista previa de la imagen seleccionada -->
               <v-img v-if="newItem.imagePreview" :src="newItem.imagePreview" height="200px" class="mt-3"></v-img>
             </v-card-text>
@@ -67,7 +77,6 @@
       </v-container>
     </v-main>
   </v-app>
-
 </template>
 
 <script setup>
@@ -81,15 +90,20 @@ const editDialog = ref(false);
 const newItem = ref({
   name: '',
   price: '',
-  imageFile: null
+  imageFile: null,
+  assetBundleFile: null
 });
 
 const fetchItems = async () => {
   try {
     const response = await fetch('http://localhost:3002/api/items'); // URL de la API de usuarios
     const data = await response.json();
-    items.value = data.items;
-    console.log(items.value);
+    console.log(data);
+    if (data.items) {
+      items.value = data.items;
+    } else {
+      items.value = [];
+    }
   } catch (error) {
     console.error('Error al obtener productos:', error);
   } finally {
@@ -108,7 +122,7 @@ const toggleProductStatus = (product) => {
 
 // Función para abrir el modal de crear producto
 const openCreateModal = () => {
-  newItem.value = { name: '', price: '', imageFile: null }; // Limpiar los campos
+  newItem.value = { name: '', price: '', imageFile: null, assetBundleFile: null }; // Limpiar los campos
   createDialog.value = true;
 };
 
@@ -118,7 +132,7 @@ const openEditModal = () => {
 
 // Función para manejar la carga del producto
 const createItem = async () => {
-  if (!newItem.value.name || !newItem.value.price || !newItem.value.imageFile) {
+  if (!newItem.value.name && !newItem.value.price && !newItem.value.imageFile && !newProduct.value.assetBundleFile) {
     alert('Por favor completa todos los campos.');
     return;
   }
@@ -127,6 +141,7 @@ const createItem = async () => {
   formData.append('name', newItem.value.name);
   formData.append('price', newItem.value.price);
   formData.append('image', newItem.value.imageFile);
+  formData.append('assetBundler', newItem.value.assetBundleFile);
 
   try {
     const response = await fetch('http://localhost:3002/api/items/new-item', {

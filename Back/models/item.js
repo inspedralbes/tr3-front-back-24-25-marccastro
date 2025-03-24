@@ -19,6 +19,10 @@ export default (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true, // Guardaremos la ruta de la imagen
     },
+    assetBundlePath: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

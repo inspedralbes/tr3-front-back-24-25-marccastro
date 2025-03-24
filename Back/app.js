@@ -33,6 +33,8 @@ const __dirname = path.dirname(__filename);
 
 app.use(fileUpload());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
+app.use('/uploads/assetsbundle', express.static(path.join(__dirname, 'uploads/assetsbundle')));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, {
