@@ -12,6 +12,7 @@ import { sequelize } from "./models/index.js";
 import apiusers from "./routes/api-users.js";
 import api_items from "./routes/api-items.js";
 import apistats from "./routes/api-stats.js";
+import api_purchases from "./routes/api-purchasesHistory.js";
 
 dotenv.config();
 const app = express();
@@ -51,6 +52,7 @@ app.use("/api/login/administraction", apiusers);
 app.use("/api/users", apiusers);
 app.use("/api/delete-user", apiusers);
 app.use("/api/items", api_items);
+app.use("/api/purchases", api_purchases);
 app.use("/api/stats", apistats);
 
 // Servidor WebSocket
