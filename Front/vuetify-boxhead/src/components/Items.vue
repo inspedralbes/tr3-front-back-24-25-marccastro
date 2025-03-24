@@ -12,7 +12,7 @@
         <v-row>
           <!-- Botón para crear un nuevo item -->
           <v-col cols="12" md="4">
-            <v-btn @click="openCreateModal" color="success" class="mt-4">Crear Producto</v-btn>
+            <v-btn @click="openCreateModal" color="success" class="mt-4">Crear Item</v-btn>
           </v-col>
         </v-row>
         <v-row>
@@ -116,8 +116,8 @@ onMounted(() => {
 });
 
 // Función para alternar el estado de activo/inactivo de un producto
-const toggleProductStatus = (product) => {
-  product.active = !product.active;
+const toggleProductStatus = (item) => {
+  item.active = !item.active;
 };
 
 // Función para abrir el modal de crear producto
@@ -132,7 +132,7 @@ const openEditModal = () => {
 
 // Función para manejar la carga del producto
 const createItem = async () => {
-  if (!newItem.value.name && !newItem.value.price && !newItem.value.imageFile && !newProduct.value.assetBundleFile) {
+  if (!newItem.value.name && !newItem.value.price && !newItem.value.imageFile && !newItem.value.assetBundleFile) {
     alert('Por favor completa todos los campos.');
     return;
   }
@@ -141,7 +141,7 @@ const createItem = async () => {
   formData.append('name', newItem.value.name);
   formData.append('price', newItem.value.price);
   formData.append('image', newItem.value.imageFile);
-  formData.append('assetBundler', newItem.value.assetBundleFile);
+  formData.append('assetBundle', newItem.value.assetBundleFile);
 
   try {
     const response = await fetch('http://localhost:3002/api/items/new-item', {

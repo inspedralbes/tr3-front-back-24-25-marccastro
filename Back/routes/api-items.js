@@ -31,23 +31,24 @@ router.get('/', async (req, res) => {
 
 // Ruta para crear un nuevo item con imagen y asset bundler
 router.post('/new-item', async (req, res) => {
+    console.log("Hola");
     try {
         const { name, price } = req.body;
 
-        if (!req.files || !req.files.image || !req.files.assetBundler) {
+        if (!req.files || !req.files.image || !req.files.assetBundle) {
             return res.status(400).json({ message: 'No se han subido los archivos requeridos' });
         }
 
         const imageFile = req.files.image;
-        const assetBundlerFile = req.files.assetBundler;
+        const assetBundleFile = req.files.assetBundle;
 
         // Rutas de guardado
         const imagePath = `/uploads/images/${imageFile.name}`;
-        const assetBundlePath = `/uploads/assetsbundle/${assetBundlerFile.name}`;
+        const assetBundlePath = `/uploads/assetsbundle/${assetBundleFile.name}`;
 
         // Definir rutas de subida
         const imageUploadPath = path.join(imagesDir, imageFile.name);
-        const assetBundleUploadPath = path.join(assetBundleDir, assetBundlerFile.name);
+        const assetBundleUploadPath = path.join(assetBundleDir, assetBundleFile.name);
 
         // Mover archivos a sus carpetas correspondientes
         imageFile.mv(imageUploadPath, (err) => {
@@ -55,7 +56,7 @@ router.post('/new-item', async (req, res) => {
                 return res.status(500).json({ message: 'Error al subir la imagen', error: err });
             }
 
-            assetBundlerFile.mv(assetBundleUploadPath, async (err) => {
+            assetBundleFile.mv(assetBundleUploadPath, async (err) => {
                 if (err) {
                     return res.status(500).json({ message: 'Error al subir el asset bundle', error: err });
                 }
