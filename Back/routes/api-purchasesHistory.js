@@ -1,11 +1,11 @@
 import express from 'express';
-import { User, Item, PurchaseHistory } from '../models/index.js';
+import { User, Skin, PurchaseHistory } from '../models/index.js';
 
 const router = express.Router();
 
 router.post('/new-purchase', async (req, res) => {
     try {
-        const { itemId, email } = req.body;
+        const { skinId, email } = req.body;
 
         console.log(email);
 
@@ -15,12 +15,12 @@ router.post('/new-purchase', async (req, res) => {
             return res.json({ message: "No hay ningun usuario con ese correo" });
         }
         
-        const existingItem = await Item.findOne({ where: itemId });
-        if (!existingItem) {
-            return res.json({ message: "No hay ningun item con esa id" });
+        const existingSkin = await Skin.findOne({ where: skinId });
+        if (!existingSkin) {
+            return res.json({ message: "No hay ningun skin con esa id" });
         }
         
-        await PurchaseHistory.create({ user_id: existingUser.id, item_id: existingItem.id, price: existingItem.price });
+        await PurchaseHistory.create({ user_id: existingUser.id, skin_id: existingSkin.id, price: existingSkin.price });
 
         return res.status(201).json({ message: "success" });
 

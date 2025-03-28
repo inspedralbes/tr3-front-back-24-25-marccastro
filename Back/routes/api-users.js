@@ -42,17 +42,18 @@ router.post('/register', async (req, res) => {
 
 router.post('/register/administraction', async (req, res) => {
     try {
+        console.log("Hola");
         const { username, email, password } = req.body;
 
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
-            return res.json({ message: "Ya existe un usuario con ese nombre" });
+            return res.status(401).json({ message: "Ya existe un usuario con ese nombre" });
         }
 
         // Verificar si el email ya está registrado
         const existingEmail = await User.findOne({ where: { email } });
         if (existingEmail) {
-            return res.json({ message: "El correo electrónico ya está en uso" });
+            return res.status(401).json({ message: "El correo electrónico ya está en uso" });
         }
 
         const hardPassword = await bcrypt.hash(password, 10);
@@ -93,7 +94,7 @@ router.post('/login/administraction', async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.json({ message: "Usuario o contraseña incorrectos" });
+            return res.status(401).json({ message: "Usuario o contraseña incorrectos" });
         }        
 
         return res.status(200).json({ message: "success" });

@@ -1,7 +1,7 @@
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
-import { Item } from '../models/index.js';
+import { Skin } from '../models/index.js';
 
 const router = express.Router();
 
@@ -21,17 +21,28 @@ const assetBundleDir = path.join(uploadsDir, 'assetsbundle');
 // Ruta para obtener todos los productos
 router.get('/', async (req, res) => {
     try {
-        const items = await Item.findAll();
-        res.json({ items });
+        const skins = await Skin.findAll();
+        res.json({ skins });
     } catch (error) {
-        console.error("Error al obtener los items:", error);
+        console.error("Error al obtener las skins:", error);
         res.status(500).json({ message: "Error interno del servidor" });
     }
 });
 
-// Ruta para crear un nuevo item con imagen y asset bundler
-router.post('/new-item', async (req, res) => {
-    console.log("Hola");
+const handleFileUpload = (file, directory) => {
+    return new Promise((resolve, reject) => {
+        const uploadPath = path.join(directory, file.name);
+        file.mv(uploadPath, (err) => {
+            if (err) {
+                return reject(err);
+            }
+            resolve(`/uploads/${directory}/${file.name}`);
+        });
+    });
+};
+
+// Ruta para crear un nuevo skin con imagen y asset bundler
+router.post('/new-skin', async (req, res) => {
     try {
         const { name, price } = req.body;
 
@@ -61,19 +72,56 @@ router.post('/new-item', async (req, res) => {
                     return res.status(500).json({ message: 'Error al subir el asset bundle', error: err });
                 }
 
-                // Guardar el nuevo item en la base de datos
-                await Item.create({
+                // Guardar el nuevo skin en la base de datos
+                await Skin.create({
                     name,
                     price,
                     imagePath,
                     assetBundlePath
                 });
 
-                res.status(201).json({ message: 'Item creado con éxito' });
+                res.status(201).json({ message: 'Skin creado con éxito' });
             });
         });
     } catch (error) {
         console.error('Error en la subida de archivos:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
+router.post('/edit-skin', async (req, res) => {
+    console.log("Edit-Skin");
+    try {
+        const { id, name, price } = req.body;
+
+        const skin = await Skin.findOne({ where: { id } });
+
+        if(!skin) res.status(404).json({ message: 'Skin no encontrado' });
+
+        // Si se proporcionan los archivos, los subimos
+        if (req.files && req.files.image && req.files.assetBundle) {
+            const imagePath = await handleFileUpload(req.files.image, imagesDir);
+            const assetBundlePath = await handleFileUpload(req.files.assetBundle, assetBundleDir);
+
+            // Actualizar los campos con los nuevos valores
+            skin.name = name;
+            skin.price = price;
+            skin.imagePath = imagePath;
+            skin.assetBundlePath = assetBundlePath;
+        }
+        // Si solo se proporciona el nombre y precio
+        else {
+            console.log("Hola221");
+            // Solo actualizamos nombre y precio, no modificamos los archivos
+            skin.name = name;
+            skin.price = price;
+        }
+
+        // Guardar los cambios en la base de datos
+        await skin.save();
+        res.status(200).json({ message: 'Skin actualizado con éxito' });
+    } catch (error) {
+        console.error('Error en la edicion de la skin:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 });

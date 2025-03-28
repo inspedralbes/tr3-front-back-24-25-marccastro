@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 
 export default (sequelize) => {
-  return sequelize.define('Item', {
+  return sequelize.define('Skin', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -28,7 +28,7 @@ export default (sequelize) => {
       defaultValue: true,
     },
   }, {
-    tableName: 'items',
+    tableName: 'skins',
     timestamps: false,
   });
 };

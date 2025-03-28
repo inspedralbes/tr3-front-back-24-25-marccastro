@@ -89,11 +89,8 @@ const submitForm = async () => {
     if (response.ok) {
       console.log('Respuesta del servidor:', data);
 
-      if (isLogin.value) {
-        // Guardar el token en localStorage
-        localStorage.setItem('token', 'Admin');
-      }
-
+      localStorage.setItem('token', 'Admin');
+      
       router.push('/dashboard');
     } else {
       console.error('Error en la autenticación:', data);

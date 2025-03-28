@@ -15,11 +15,11 @@ export default (sequelize) => {
         key: 'id'
       },
     },
-    item_id: {
+    skin_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'items',
+        model: 'skins',
         key: 'id'
       },
     },

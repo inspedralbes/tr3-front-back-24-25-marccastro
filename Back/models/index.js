@@ -26,23 +26,23 @@ const connectDB = async () => {
 
 // Importamos los modelos
 import defineUser from './user.js';
-import defineItem from './item.js';
+import defineSkin from './skins.js';
 import definePurchaseHistory from './purchaseHistory.js';
 
 // Inicializamos los modelos
 const User = defineUser(sequelize);
-const Item = defineItem(sequelize);
+const Skin = defineSkin(sequelize);
 const PurchaseHistory = definePurchaseHistory(sequelize);
 
 // Asociaciones
 User.hasMany(PurchaseHistory, { foreignKey: 'user_id' });
 PurchaseHistory.belongsTo(User, { foreignKey: 'user_id' });
 
-Item.hasMany(PurchaseHistory, { foreignKey: 'item_id' });
-PurchaseHistory.belongsTo(Item, { foreignKey: 'item_id' });
+Skin.hasMany(PurchaseHistory, { foreignKey: 'skin_id' });
+PurchaseHistory.belongsTo(Skin, { foreignKey: 'skin_id' });
 
 connectDB();
 
 // Exportamos la instancia y los modelos
-export { sequelize, User, Item, PurchaseHistory };
+export { sequelize, User, Skin, PurchaseHistory };
 export default sequelize;

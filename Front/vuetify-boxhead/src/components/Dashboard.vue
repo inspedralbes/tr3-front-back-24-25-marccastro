@@ -37,7 +37,7 @@ import { ref } from 'vue';
 // Importamos los componentes secundarios
 import BoxheadControl from './Boxhead-Control.vue';
 import Users from './Users.vue';
-import Products from './Items.vue';
+import Skins from './Skins.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -48,7 +48,7 @@ const selectedComponent = ref(BoxheadControl); // Componente por defecto
 const menuItems = ref([
   { icon: 'mdi-gamepad-variant', title: 'Boxhead Control', component: BoxheadControl },
   { icon: 'mdi-account-group', title: 'Users', component: Users },
-  { icon: 'mdi-package-variant-closed', title: 'Items', component: Products }
+  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins }
 ]);
 
 const logout = () => {

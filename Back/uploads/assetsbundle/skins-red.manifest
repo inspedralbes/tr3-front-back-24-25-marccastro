@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+UnityVersion: 6000.0.34f1
+CRC: 852991198
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5ec188a149823e7f74191eb65c9e3d39
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5139a28ff5cc875fadfcec05a2a9a14b
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 21e792a22c3d0dc038e9e8a1e93c78c2
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Image/Skins-Red/Skins-Red/Walk_Up.anim
+- Assets/Image/Skins-Red/Skins-Red/Player-Red.controller
+- Assets/Image/Skins-Red/Skins-Red/Idles/Idle_Up.anim
+- Assets/Image/Skins-Red/Skins-Red/Walk_Right.anim
+- Assets/Image/Skins-Red/Skins-Red/Walk_Down.anim
+- Assets/Image/Skins-Red/Skins-Red/Idles/Idle_Down.anim
+- Assets/Image/Skins-Red/Skins-Red/Idles/Idle_Left.anim
+- Assets/Image/Skins-Red/Skins-Red/Walk_Left.anim
+- Assets/Image/Skins-Red/Skins-Red/Idles/Idle_Right.anim
+Dependencies: []
