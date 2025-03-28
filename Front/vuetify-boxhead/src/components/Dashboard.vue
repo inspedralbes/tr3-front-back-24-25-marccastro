@@ -52,6 +52,7 @@ const menuItems = ref([
 ]);
 
 const logout = () => {
+  localStorage.removeItem('token');
   router.push('/');
-}
+};
 </script>
