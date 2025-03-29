@@ -36,7 +36,7 @@ const handleFileUpload = (file, directory) => {
             if (err) {
                 return reject(err);
             }
-            resolve(`/uploads/${directory}/${file.name}`);
+            resolve(`/${directory}/${file.name}`);
         });
     });
 };
@@ -90,7 +90,6 @@ router.post('/new-skin', async (req, res) => {
 });
 
 router.post('/edit-skin', async (req, res) => {
-    console.log("Edit-Skin");
     try {
         const { id, name, price } = req.body;
 

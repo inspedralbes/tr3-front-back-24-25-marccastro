@@ -47,10 +47,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Rutas
 app.use("/api", apiusers);
-app.use("/api/register/administraction", apiusers);
-app.use("/api/login/administraction", apiusers);
 app.use("/api/users", apiusers);
-app.use("/api/delete-user", apiusers);
 app.use("/api/skins", api_skins);
 app.use("/api/purchases", api_purchases);
 app.use("/api/stats", apistats);

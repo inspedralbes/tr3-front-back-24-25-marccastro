@@ -75,7 +75,7 @@ const editUser = (user) => {
 const deleteUser = async (user) => {
   console.log('Eliminar usuario:', user);
   try {
-    const response = await fetch('http://localhost:3002/api/delete-user', {
+    const response = await fetch('http://localhost:3002/api/users/delete-user', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'

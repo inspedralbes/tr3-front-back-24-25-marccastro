@@ -74,7 +74,7 @@
         </v-dialog>
 
         <!-- Modal para editar una skin -->
-        <v-dialog v-model="createDialog" max-width="500px">
+        <v-dialog v-model="editDialog" max-width="500px">
           <v-card>
             <v-card-title>
               <span class="headline">Editar Skin</span>
@@ -108,12 +108,10 @@
             </v-card-text>
             <v-card-actions>
               <v-btn @click="editSkin" color="success">Editar</v-btn>
-              <v-btn @click="createDialog = false" color="red">Cancelar</v-btn>
+              <v-btn @click="editDialog = false" color="red">Cancelar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-
-        <!-- Modal para editar el skin -->
       </v-container>
     </v-main>
   </v-app>
@@ -124,7 +122,7 @@ import { ref, onMounted } from 'vue';
 
 const skins = ref([]);
 const loading = ref(true);
-
+const editDialog = ref(false);
 const createDialog = ref(false);
 const newSkin = ref({
   name: '',
@@ -181,7 +179,7 @@ const openEditModal = async (skin) => {
     imageFile: null, // Deberías dejarlo en null ya que la imagen se actualiza
     assetBundleFile: null, // Similar para el asset
   };
-  createDialog.value = true;
+  editDialog.value = true;
 }
 
 // Función para manejar la carga del producto
@@ -238,7 +236,7 @@ const editSkin = async () => {
     if (response.ok) {
       alert('Skin editado con éxito');
       fetchSkins();
-      createDialog.value = false;
+      editDialog.value = false;
     } else {
       alert(data.message || 'Hubo un error al editar la skin');
     }

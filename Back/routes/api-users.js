@@ -29,10 +29,11 @@ router.post('/register', async (req, res) => {
             return res.json({ message: "El correo electrónico ya está en uso" });
         }
 
-        // Crear el usuario
-        await User.create({ username, email, password: password, admin: 0 });
+        const hardPassword = await bcrypt.hash(password, 10);
 
-        return res.status(201).json({ message: "success" });
+        await User.create({ username, email, password: hardPassword, admin: 0 });
+
+        return res.status(200).json({ message: "success", email: email });
 
     } catch (error) {
         console.error("Error en el registro:", error);
@@ -93,12 +94,15 @@ router.post('/login/administraction', async (req, res) => {
 
         const user = await User.findOne({ where: { email } });
 
+        if(user.admin != 1) {
+            return res.status(401).json({ message: "No eres administrador"});
+        } 
+    
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: "Usuario o contraseña incorrectos" });
-        }        
-
+        }
+  
         return res.status(200).json({ message: "success" });
-
     } catch (error) {
         console.error("Error en login:", error);
         return res.status(500).json({ message: "Error interno del servidor" });
