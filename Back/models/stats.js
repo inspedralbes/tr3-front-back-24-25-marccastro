@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const StatsSchema = new mongoose.Schema({
     kills: { type: Number, required: true },
-    rounds: { type: Number, required: true }
+    rounds: { type: Number, required: true },
+    totalTime: { type: Number, required: true },
+    wasModificatedMatch: { type: Boolean, required: false }
 }, {
     timeStamp: true
 });

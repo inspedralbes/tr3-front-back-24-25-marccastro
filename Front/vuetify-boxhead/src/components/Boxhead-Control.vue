@@ -39,6 +39,7 @@
                   thumb-label
                 ></v-slider>
                 <v-slider
+                  v-if="selectedCharacter != 'Player'"
                   v-model="damage"
                   label="Damage"
                   :min="10"
@@ -46,8 +47,8 @@
                   step="5"
                   thumb-label
                 ></v-slider>
-                <!-- Selector para los colores -->
                 <v-select
+                  v-if="selectedCharacter != 'Player'"
                   v-model="colorName"
                   :items="colorNames"
                   label="Seleccionar Color"
