@@ -47,8 +47,9 @@ const selectedComponent = ref(BoxheadControl); // Componente por defecto
 // Menú de navegación con los íconos y componentes
 const menuItems = ref([
   { icon: 'mdi-gamepad-variant', title: 'Boxhead Control', component: BoxheadControl },
-  { icon: 'mdi-account-group', title: 'Users', component: Users },
-  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins }
+  { icon: 'mdi-account-group', title: 'Usuaris', component: Users },
+  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins },
+  { icon: '', title: 'Estadístiques', component: Statistics }
 ]);
 
 const logout = () => {
