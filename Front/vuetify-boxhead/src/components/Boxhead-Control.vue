@@ -50,13 +50,14 @@
                 <v-select
                   v-model="colorName"
                   :items="colorNames"
-                  label="Color"
+                  label="Seleccionar Color"
                   outlined
                 ></v-select>
               </v-card-text>
               <v-card-actions>
                 <v-btn @click="updateCharacter">Actualizar Personaje</v-btn>
                 <v-btn @click="saveConfiguration">Guardar Configuración</v-btn>
+                <v-btn @click="restartCharacter">Restaurar Personaje</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -68,23 +69,25 @@
 
 <script setup>
 import { ref } from 'vue';
-import { functionSocket } from '../services/socketManager';
+import { functionSocket, functionSocketRestart } from '../services/socketManager';
 
 // Atributos de control
 const health = ref(50); // Valor predeterminado
 const speed = ref(5); // Valor predeterminado
 const damage = ref(20); // Valor predeterminado
 const selectedCharacter = ref(null); // Nombre del personaje seleccionado
-const characters = ref(['Player', 'Zombie', 'DogZombie']); // Personajes disponibles
+const characters = ref(['Player', 'Zombie', 'FatZombie']); // Personajes disponibles
 const save = ref(false);
 
 // Selector para el color (por nombre)
-const colorName = ref('Rojo'); // Valor predeterminado
-const colorNames = ref(['Rojo', 'Azul', 'Verde']); // Colores por nombre
+const colorName = ref(''); // Valor predeterminado
+const colorNames = ref(['White', 'Rojo', 'Azul', 'Verde']); // Colores por nombre
 
 // Función para convertir el nombre del color a su valor hexadecimal
 const getColorHex = (color) => {
   switch (color) {
+    case 'White':
+      return 'FFFFFF'
     case 'Rojo':
       return 'FF0000';
     case 'Azul':
@@ -121,4 +124,8 @@ const saveConfiguration = () => {
     console.error("Por favor selecciona un personaje y un color.");
   }
 };
+
+const restartCharacter = () => {
+  functionSocketRestart(selectedCharacter);
+}
 </script>

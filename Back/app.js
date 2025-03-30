@@ -2,7 +2,7 @@
 import express from "express";
 import path from "path";
 import { createServer } from "http";
-import { WebSocketServer } from "ws"; // WebSocket nativo en Node.js
+import { WebSocketServer } from "ws";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
@@ -55,38 +55,60 @@ app.use("/api/stats", apistats);
 // Servidor WebSocket
 const wss = new WebSocketServer({ server });
 
-const clients = [];
+const clients = {};
 
 wss.on("connection", (ws) => {
   console.log("Un cliente se ha conectado");
-  clients.push(ws);
 
+  // Al recibir un mensaje del cliente
   ws.on("message", (message) => {
-    // Si el mensaje es un Buffer (datos binarios), convertirlo a cadena
     if (Buffer.isBuffer(message)) {
-      message = message.toString();  // Convierte el Buffer a una cadena
+      message = message.toString();  // Convertir Buffer a string
     }
 
     try {
-      const data = JSON.parse(message); // Convertimos el mensaje en JSON
+      const data = JSON.parse(message);
+      console.log("Datos recibidos:", data);
 
-      console.log("Datos recibidos:", data); // Debug
+      switch (data.event_backend) {
+        case "register":
+          clients[data.payload.id] = { socket: ws, tipo: data.payload.tipo };
+          console.log(`Cliente registrado: ${data.payload.id} (${data.payload.tipo})`);
+          break;
 
-      // Aquí puedes hacer algo con los datos (ej: actualizar BD, broadcast a otros clientes)
-      // Puedes enviar un mensaje al cliente Unity de la misma manera que a los clientes web
-      clients.forEach(client => {
-        client.send(JSON.stringify(data)); // Enviar a todos los clientes
-      });
+        case "send-to-unity":
+          if (!data.payload) {
+            console.error("Error: El mensaje de send-to-unity no tiene payload");
+            return;
+          }
+
+          for(const id in clients) {
+            if (clients[id].tipo === "unity") {
+              clients[id].socket.send(JSON.stringify({
+                event_unity: data.event_unity,
+                payload: data.payload
+              }));
+            }
+            else console.log("No esta");
+          }
+          break;
+        
+        default:
+          console.log("Evento desconocido", data);
+      }
     } catch (error) {
       console.error("Error al procesar mensaje:", error);
     }
   });
 
+  // Cuando un cliente se desconecta
   ws.on("close", () => {
-    console.log("Un cliente se ha desconectado");
-    const index = clients.indexOf(ws);
-    if (index !== -1) {
-      clients.splice(index, 1);
+    for (const id in clients) {
+      if (clients[id].socket === ws) {
+        console.log(`Cliente ${id} desconectado`);
+        delete clients[id];
+        break;
+      }
     }
   });
 });
