@@ -1,65 +1,98 @@
 import os
-import pymongo
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
+from pymongo import MongoClient
 from dotenv import load_dotenv
+import seaborn as sns
+import matplotlib.pyplot as plt
+from datetime import datetime
 
-# Cargar las variables de entorno desde el archivo .env
+# Cargar variables de entorno
 load_dotenv()
 
-# Conexión con MongoDB usando pymongo y manejo de excepciones
-try:
-    # Obtener los valores de las variables de entorno
-    MONGODB_URI = os.getenv("MONGODB_URI")
-    MONGODB_DB = os.getenv("MONGODB_DB")
-    MONGODB_COLLECTION = os.getenv("MONGODB_COLLECTION")
+def connect_to_mongodb():
+    """Establece conexión con MongoDB"""
+    try:
+        client = MongoClient(os.getenv("MONGODB_URI"))
+        db = client[os.getenv("MONGODB_DB")]
+        collection = db[os.getenv("MONGODB_COLLECTION")]
+        return collection
+    except Exception as e:
+        print(f"Error conectando a MongoDB: {e}")
+        return None
 
-    # Conectar al cliente de MongoDB
-    client = pymongo.MongoClient(MONGODB_URI)
+def get_player_stats(email, collection):
+    """Obtiene estadísticas del jugador"""
+    query = {"email": email}
+    projection = {"kills": 1, "createdAt": 1, "_id": 0}
+    return list(collection.find(query, projection))
+
+def generate_kills_plot(email, output_filename):
+    """Genera y guarda el gráfico de kills por fecha"""
+    current_dir = os.getcwd()
+    graph_dir = os.path.join(current_dir, 'Images')
+    # Conectar a MongoDB
+    collection = connect_to_mongodb()
+    if not collection:
+        return False
     
-    # Seleccionar la base de datos y colección de MongoDB
-    db = client[MONGODB_DB]
-    collection = db[MONGODB_COLLECTION]
-except pymongo.errors.ConnectionError as e:
-    # Manejar los posibles errores de conexión
-    print(f"Error de conexión con MongoDB: {e}")
-    exit(1)  # Si hay error, salir del programa
+    # Obtener datos
+    stats = get_player_stats(email, collection)
+    if not stats:
+        print(f"No se encontraron estadísticas para {email}")
+        return False
+    
+    # Procesar datos
+    data = []
+    for stat in stats:
+        try:
+            date = datetime.strptime(stat["createdAt"], "%Y-%m-%d").date()
+            data.append({
+                "Fecha": date,
+                "Kills": stat["kills"],
+                "Día": date.strftime("%d/%m/%Y")
+            })
+        except Exception as e:
+            print(f"Error procesando dato: {e}")
+    
+    if not data:
+        print("No hay datos válidos para graficar")
+        return False
+    
+    # Configurar gráfico
+    plt.figure(figsize=(12, 6))
+    sns.set_style("whitegrid")
+    
+    # Crear gráfico de barras acumuladas
+    ax = sns.barplot(
+        data=data,
+        x="Día",
+        y="Kills",
+        hue="Día",
+        palette="viridis",
+        estimator=sum,
+        ci=None,
+        dodge=False
+    )
+    
+    # Personalizar gráfico
+    plt.title(f"Estadísticas de Kills - {email}", fontsize=14, pad=20)
+    plt.xlabel("Fecha", fontsize=12)
+    plt.ylabel("Total de Kills", fontsize=12)
+    plt.xticks(rotation=45, ha='right')
+    
+    # Eliminar leyenda si hay muchas fechas
+    if len(data) > 7:
+        ax.legend().remove()
+    
+    # Ajustar layout y guardar
+    graph_path = os.path.join(graph_dir, output_filename)
+    plt.tight_layout()
+    plt.savefig(output_filename, dpi=300, bbox_inches='tight')
+    plt.close()
+    
+    print(f"Gráfico guardado como {output_filename}")
+    return True
 
-# Obtener datos de MongoDB con los campos 'kills', 'createdAt' y 'email'
-data = list(collection.find({}, {"_id": 0, "kills": 1, "createdAt": 1, "email": 1}))
-
-# Convertir los datos obtenidos en un DataFrame de pandas
-df = pd.DataFrame(data)
-
-# Asegurarnos de que la columna 'createdAt' sea tipo fecha para trabajar con ella
-df["createdAt"] = pd.to_datetime(df["createdAt"])
-
-# Verificar si hay valores nulos en la columna 'email' y eliminarlos
-df = df.dropna(subset=["email"])
-
-# Asegurarnos de que la columna 'email' sea tipo string
-df["email"] = df["email"].astype(str)
-
-# Crear los "bins" en escala logarítmica para el histograma basado en el valor máximo de 'kills'
-bins = np.logspace(0, np.log10(df["kills"].max()), 20)  # Ajustar según el máximo de kills
-
-# Graficar el histograma apilado, diferenciando por 'email'
-plt.figure(figsize=(12, 6))
-sns.histplot(data=df, x="kills", hue="email", bins=bins, multiple="stack", log_scale=True)
-
-# Mejoras visuales para el gráfico
-plt.xlabel("Kills (Escala Log)")  # Etiqueta del eje X
-plt.ylabel("Frecuencia")  # Etiqueta del eje Y
-plt.title("Histograma Apilado de Kills por Email (Escala Log)")  # Título del gráfico
-
-# Ajuste manual de la leyenda
-handles, labels = plt.gca().get_legend_handles_labels()  # Obtener los handles y labels de la leyenda
-plt.legend(handles=handles, labels=labels, title="Email", loc="upper right", bbox_to_anchor=(1.3, 1))
-
-# Mejorar la distribución del gráfico para evitar superposiciones
-plt.tight_layout()
-
-# Mostrar el gráfico
-plt.show()
+# Ejemplo de uso
+if __name__ == "__main__":
+    email_usuario = "marc@gmail.com"  # Cambiar por el email deseado
+    generate_kills_plot(email_usuario, "kills_evolution.png")

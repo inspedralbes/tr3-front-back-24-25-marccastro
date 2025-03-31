@@ -8,7 +8,7 @@ services:
       - 9000:9000
     volumes:
       - data:/data
-      - /var/run/docker.sock:/var/run/docker.sock  # Corrección aquí
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
   # Contenedor de MySQL
@@ -67,6 +67,7 @@ services:
       - ./Back/.env  # Si tienes variables de entorno específicas para el contenedor Python
     volumes:
       - ./Back/Statistics:/app  # Mapea tu código Python al contenedor
+      - ./Back/Statistics:/Images
    
   # Contenedor de Adminer (Interfaz para gestionar la base de datos)
   adminer:
