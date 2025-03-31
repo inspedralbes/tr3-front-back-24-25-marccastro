@@ -1,64 +1,72 @@
+version: "3.8"
+
 services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - 9443:9443
+      - 9000:9000
+    volumes:
+      - data:/data
+      - /var/run/docker.sock:/var/run/docker.sock  # Corrección aquí
+    restart: unless-stopped
+
   # Contenedor de MySQL
   mysql:
     image: mysql:8.0
     container_name: mysql
     restart: always
     env_file:
-      - ./Back/.env  # <-- Carga las variables desde .env
+      - ./Back/.env  
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword  # Contraseña para el root de MySQL
+      MYSQL_ROOT_PASSWORD: rootpassword  
     ports:
-      - "3306:3306"  # Mapea el puerto 3306 del contenedor al host
+      - "3306:3306"  
     volumes:
-      - mysql_data:/var/lib/mysql  # Volumen para persistir datos
-
-  # Contenedor de MongoDB
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    restart: always
-    env_file:
-      - ./Back/.env
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: adminpassword
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
+      - mysql_data:/var/lib/mysql  
 
   # Contenedor de Node.js (Backend)
   app:
     build: 
-      context: ./Back  # Se especifica la carpeta donde está el Dockerfile
+      context: ./Back  
       dockerfile: Dockerfile.Node
     container_name: node_app
     restart: always
     env_file:
-      - ./Back/.env  # Carga las variables desde .env
+      - ./Back/.env  
     ports:
-      - "3002:3002"  # Mapea el puerto 3001 del contenedor al host
+      - "3002:3002"  
     depends_on:
-      - mysql  # Asegura que MySQL esté disponible antes de iniciar el app
-      - mongodb
+      - mysql
     volumes:
-      - ./Back:/app  # Mapea el código del backend al contenedor
-      - /app/node_modules  # Volumen para preservar las dependencias
+      - ./Back:/app  
+      - /app/node_modules  
 
   # Contenedor de Vuetify (Frontend)
   frontend:
     build: 
-      context: ./Front/vuetify-boxhead  # Ruta al Dockerfile de Vuetify
+      context: ./Front/vuetify-boxhead  
       dockerfile: Dockerfile.vuetify
     container_name: vuetify_frontend
     restart: always
     ports:
-      - "7001:7001"  # Mapea el puerto 5170 del contenedor al host
+      - "7001:7001"  
     volumes:
       - ./Front/vuetify-boxhead:/app
       - /app/node_modules
     working_dir: /app
+  
+    # Contenedor de Python
+  python-app:
+    build:
+      context: ./Back/Statistics  # Asumiendo que tu código Python está en esta carpeta
+      dockerfile: Dockerfile.Python  # El Dockerfile que hemos definido para Python
+    container_name: python_app
+    restart: always
+    env_file:
+      - ./Back/.env  # Si tienes variables de entorno específicas para el contenedor Python
+    volumes:
+      - ./Back/Statistics:/app  # Mapea tu código Python al contenedor
    
   # Contenedor de Adminer (Interfaz para gestionar la base de datos)
   adminer:
@@ -66,8 +74,8 @@ services:
     container_name: adminer
     restart: always
     ports:
-      - "8080:8080"  # Adminer será accesible en http://localhost:8080
+      - "8080:8080"  
 
 volumes:
+  data:
   mysql_data:
-  mongodb_data:

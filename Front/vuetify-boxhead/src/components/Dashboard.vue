@@ -38,6 +38,7 @@ import { ref } from 'vue';
 import BoxheadControl from './Boxhead-Control.vue';
 import Users from './Users.vue';
 import Skins from './Skins.vue';
+// import Statistics from './Statistics.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -48,8 +49,7 @@ const selectedComponent = ref(BoxheadControl); // Componente por defecto
 const menuItems = ref([
   { icon: 'mdi-gamepad-variant', title: 'Boxhead Control', component: BoxheadControl },
   { icon: 'mdi-account-group', title: 'Usuaris', component: Users },
-  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins },
-  { icon: '', title: 'Estadístiques', component: Statistics }
+  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins }
 ]);
 
 const logout = () => {

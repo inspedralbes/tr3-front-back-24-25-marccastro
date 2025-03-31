@@ -14,9 +14,9 @@ export const functionSocket = (save, character, newHealth, newSpeed, newDamage, 
     console.log("Enviado");
 
     let data = {
-      event_backend: "send-to-unity",  // Agregamos el evento
+      event_backend: "send-to-unity",
       event_unity: "stats-update",
-      payload: { // Metemos los datos dentro de "payload"
+      payload: {
         save: save.value,
         name: character.value,
         health: newHealth.value,

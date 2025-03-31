@@ -57,8 +57,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn @click="updateCharacter">Actualizar Personaje</v-btn>
-                <v-btn @click="saveConfiguration">Guardar Configuración</v-btn>
-                <v-btn @click="restartCharacter">Restaurar Personaje</v-btn>
+                <v-btn v-if="selectedCharacter != 'Player'" @click="saveConfiguration">Guardar Configuración</v-btn>
+                <v-btn v-if="selectedCharacter != 'Player'" @click="restartCharacter">Restaurar Personaje</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
