@@ -59,15 +59,15 @@ services:
     # Contenedor de Python
   python-app:
     build:
-      context: ./Back/Statistics  # Asumiendo que tu código Python está en esta carpeta
+      context: ./Back/statistics  # Asumiendo que tu código Python está en esta carpeta
       dockerfile: Dockerfile.Python  # El Dockerfile que hemos definido para Python
     container_name: python_app
     restart: always
     env_file:
       - ./Back/.env  # Si tienes variables de entorno específicas para el contenedor Python
     volumes:
-      - ./Back/Statistics:/app  # Mapea tu código Python al contenedor
-      - ./Back/Statistics:/Images
+      - ./Back/statistics:/app  # Mapea tu código Python al contenedor
+      - ./Back/statistics:/Images
    
   # Contenedor de Adminer (Interfaz para gestionar la base de datos)
   adminer:
