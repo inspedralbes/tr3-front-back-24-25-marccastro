@@ -26,9 +26,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-const server = createServer(app); // 🔥 Cambia "http.createServer" por "createServer"
+const server = createServer(app);
 
-// Configuración de rutas y vistas
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -36,6 +35,8 @@ app.use(fileUpload());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
 app.use('/uploads/assetsbundle', express.static(path.join(__dirname, 'uploads/assetsbundle')));
+app.use('/statistics/images', express.static(path.join(__dirname, 'statistics/images')));
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, {

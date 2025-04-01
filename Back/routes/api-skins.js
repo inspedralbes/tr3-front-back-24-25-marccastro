@@ -49,40 +49,18 @@ router.post('/new-skin', async (req, res) => {
         if (!req.files || !req.files.image || !req.files.assetBundle) {
             return res.status(400).json({ message: 'No se han subido los archivos requeridos' });
         }
+        
+        const imagePath = await handleFileUpload(req.files.image, imagesDir);
+        const assetBundlePath = await handleFileUpload(req.files.assetBundle, assetBundleDir);
 
-        const imageFile = req.files.image;
-        const assetBundleFile = req.files.assetBundle;
-
-        // Rutas de guardado
-        const imagePath = `/uploads/images/${imageFile.name}`;
-        const assetBundlePath = `/uploads/assetsbundle/${assetBundleFile.name}`;
-
-        // Definir rutas de subida
-        const imageUploadPath = path.join(imagesDir, imageFile.name);
-        const assetBundleUploadPath = path.join(assetBundleDir, assetBundleFile.name);
-
-        // Mover archivos a sus carpetas correspondientes
-        imageFile.mv(imageUploadPath, (err) => {
-            if (err) {
-                return res.status(500).json({ message: 'Error al subir la imagen', error: err });
-            }
-
-            assetBundleFile.mv(assetBundleUploadPath, async (err) => {
-                if (err) {
-                    return res.status(500).json({ message: 'Error al subir el asset bundle', error: err });
-                }
-
-                // Guardar el nuevo skin en la base de datos
-                await Skin.create({
-                    name,
-                    price,
-                    imagePath,
-                    assetBundlePath
-                });
-
-                res.status(201).json({ message: 'Skin creado con éxito' });
-            });
+        await Skin.create({
+            name,
+            price,
+            imagePath,
+            assetBundlePath
         });
+
+        res.status(201).json({ message: 'Skin creado con éxito' });
     } catch (error) {
         console.error('Error en la subida de archivos:', error);
         res.status(500).json({ message: 'Error interno del servidor' });
@@ -110,7 +88,6 @@ router.post('/edit-skin', async (req, res) => {
         }
         // Si solo se proporciona el nombre y precio
         else {
-            console.log("Hola221");
             // Solo actualizamos nombre y precio, no modificamos los archivos
             skin.name = name;
             skin.price = price;

@@ -22,6 +22,10 @@ export default (sequelize) => {
     admin: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    statistics: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     tableName: 'users',

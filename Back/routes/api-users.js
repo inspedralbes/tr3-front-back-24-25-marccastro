@@ -26,12 +26,13 @@ router.post('/register', async (req, res) => {
         // Verificar si el email ya está registrado
         const existingEmail = await User.findOne({ where: { email } });
         if (existingEmail) {
-            return res.json({ message: "El correo electrónico ya está en uso" });
+            return res.status(401).json({ message: "El correo electrónico ya está en uso" });
         }
 
         const hardPassword = await bcrypt.hash(password, 10);
+        const emailFolder = `/statistics/images/${email.replace(/[@.]/g, "_")}`;
 
-        await User.create({ username, email, password: hardPassword, admin: 0 });
+        await User.create({ username, email, password: hardPassword, admin: 0, statistics: emailFolder });
 
         return res.status(200).json({ message: "success", email: email });
 
@@ -58,9 +59,10 @@ router.post('/register/administraction', async (req, res) => {
         }
 
         const hardPassword = await bcrypt.hash(password, 10);
+        const emailFolder = `/statistics/images/${email.replace(/[@.]/g, "_")}`;
 
         // Crear el usuario
-        await User.create({ username, email, password: hardPassword, admin: 1 });
+        await User.create({ username, email, password: hardPassword, admin: 1, statistics: emailFolder });
 
         return res.status(201).json({ message: "success" });
 
