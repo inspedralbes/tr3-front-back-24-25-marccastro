@@ -44,7 +44,7 @@ const loading = ref(true);
 
 const fetchUsers = async () => {
   try {
-    const response = await fetch('http://localhost:3002/api/users');
+    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/users');
     const data = await response.json();
     users.value = data;
   } catch (error) {
@@ -65,7 +65,7 @@ const editUser = (user) => {
 const deleteUser = async (user) => {
   console.log('Eliminar usuario:', user);
   try {
-    const response = await fetch('http://localhost:3002/api/users/delete-user', {
+    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/users/delete-user', {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'

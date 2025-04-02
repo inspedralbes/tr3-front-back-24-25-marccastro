@@ -70,8 +70,8 @@ const submitForm = async () => {
   if (!form.value.validate()) return;
 
   const endpoint = isLogin.value
-    ? 'http://localhost:3002/api/users/login/administraction'
-    : 'http://localhost:3002/api/users/register/administraction';
+    ? 'http://boxheadcontrol.dam.inspedralbes.cat:3002/api/users/login/administraction'
+    : 'http://boxheadcontrol.dam.inspedralbes.cat:3002/api/users/register/administraction';
 
   let userData = isLogin.value
     ? { email: email.value, password: password.value }

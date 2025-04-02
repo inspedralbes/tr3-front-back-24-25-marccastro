@@ -18,7 +18,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
-  origin: 'http://localhost:7001',
+  origin: 'http://boxheadcontrol.dam.inspedralbes.cat:7002',
   methods: ['GET', 'POST', 'DELETE', 'DOWNLOAD'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
@@ -128,7 +128,7 @@ sequelize
   .then(() => {
     console.log("Base de dades sincronitzada.");
     server.listen(PORT, () => {
-      console.log(`Servidor funcionan en http://localhost:${PORT}`);
+      console.log(`Servidor funcionan en http://boxheadcontrol.dam.inspedralbes.cat:${PORT}`);
     });
   })
   .catch((err) => console.error("Error sincronitzant la base de dades:", err));

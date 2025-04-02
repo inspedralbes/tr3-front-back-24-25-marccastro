@@ -1,4 +1,4 @@
-const socket = new WebSocket("ws://localhost:3002");
+const socket = new WebSocket("ws://boxheadcontrol.dam.inspedralbes.cat:3002");
 
 socket.onopen = () => {
   console.log("Conectado al servidor WebSocket");

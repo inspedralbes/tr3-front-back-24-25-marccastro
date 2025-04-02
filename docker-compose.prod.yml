@@ -3,7 +3,6 @@ services:
     image: portainer/portainer-ce:latest
     ports:
       - 9443:9443
-      - 9000:9000
     volumes:
       - data:/data
       - /var/run/docker.sock:/var/run/docker.sock
@@ -37,19 +36,6 @@ services:
     volumes:
       - ./Back:/app  
       - /app/node_modules  
-
-  frontend:
-    build: 
-      context: ./Front/vuetify-boxhead  
-      dockerfile: Dockerfile.Vuetify
-    container_name: vuetify_frontend
-    restart: always
-    ports:
-      - "7001:7001"  
-    volumes:
-      - ./Front/vuetify-boxhead:/app
-      - /app/node_modules
-    working_dir: /app
   
   python-app:
     build:
@@ -69,15 +55,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-
-  apache:
-    image: httpd:latest
-    container_name: apache_server
-    restart: always
-    ports:
-      - "7002:7002"
-    volumes:
-      - ./public_html:/usr/local/apache2/htdocs/
 
 volumes:
   data:

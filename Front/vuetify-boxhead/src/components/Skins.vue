@@ -17,7 +17,7 @@
         <v-row>
           <v-col v-for="skin in skins" v-if="!loading && skins.length" :key="skin.id" cols="12" md="4">
             <v-card>
-              <v-img :src="`http://localhost:3002${skin.imagePath}`" height="200px"></v-img>
+              <v-img :src="`http://boxheadcontrol.dam.inspedralbes.cat:3002${skin.imagePath}`" height="200px"></v-img>
               <v-card-title>{{ skin.name }}</v-card-title>
               <v-card-subtitle>{{ skin.price }}€</v-card-subtitle>
               <v-card-actions>
@@ -123,7 +123,7 @@ const newEditSkin = ref({
 
 const fetchSkins = async () => {
   try {
-    const response = await fetch('http://localhost:3002/api/skins');
+    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/skins');
     const data = await response.json();
     if (data.skins) {
       skins.value = data.skins;
@@ -170,7 +170,7 @@ const createSkin = async () => {
   formData.append('assetBundle', newSkin.value.assetBundleFile);
 
   try {
-    const response = await fetch('http://localhost:3002/api/skins/new-skin', {
+    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/skins/new-skin', {
       method: 'POST',
       body: formData
     });
@@ -199,7 +199,7 @@ const editSkin = async () => {
   formData.append('assetBundle', newEditSkin.value.assetBundleFile);
 
   try {
-    const response = await fetch('http://localhost:3002/api/skins/edit-skin', {
+    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/skins/edit-skin', {
       method: 'POST',
       body: formData
     });
