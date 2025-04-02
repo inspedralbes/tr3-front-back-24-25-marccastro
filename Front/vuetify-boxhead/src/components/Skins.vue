@@ -10,13 +10,11 @@
           Cargando skins...
         </v-alert>
         <v-row>
-          <!-- Botón para crear un nuevo skin -->
           <v-col cols="12" md="4">
             <v-btn @click="openCreateModal" color="success" class="mt-4">Crear Skin</v-btn>
           </v-col>
         </v-row>
         <v-row>
-          <!-- Listado de Skins -->
           <v-col v-for="skin in skins" v-if="!loading && skins.length" :key="skin.id" cols="12" md="4">
             <v-card>
               <v-img :src="`http://localhost:3002${skin.imagePath}`" height="200px"></v-img>
@@ -33,7 +31,6 @@
           </v-col>
         </v-row>
 
-        <!-- Modal para crear un nuevo skin -->
         <v-dialog v-model="createDialog" max-width="500px">
           <v-card>
             <v-card-title>
@@ -43,7 +40,6 @@
               <v-text-field v-model="newSkin.name" label="Nombre de la Skin"></v-text-field>
               <v-text-field v-model="newSkin.price" label="Precio" type="number"></v-text-field>
               
-              <!-- Campo para subir la imagen del Skin -->
               <v-file-input
                 v-model="newSkin.imageFile"
                 label="Selecciona la Imagen"
@@ -53,7 +49,6 @@
                 hint="Máximo 1 MB"
               ></v-file-input>
 
-              <!-- Campo para subir el asset bundler -->
               <v-file-input
                 v-model="newSkin.assetBundleFile"
                 label="Selecciona el Asset Bundler"
@@ -63,7 +58,6 @@
                 hint="Máximo 5 MB"
               ></v-file-input>
 
-              <!-- Vista previa de la imagen seleccionada -->
               <v-img v-if="newSkin.imagePreview" :src="newSkin.imagePreview" height="200px" class="mt-3"></v-img>
             </v-card-text>
             <v-card-actions>
@@ -73,7 +67,6 @@
           </v-card>
         </v-dialog>
 
-        <!-- Modal para editar una skin -->
         <v-dialog v-model="editDialog" max-width="500px">
           <v-card>
             <v-card-title>
@@ -83,7 +76,6 @@
               <v-text-field v-model="newEditSkin.name" label="Nombre de la Skin"></v-text-field>
               <v-text-field v-model="newEditSkin.price" label="Precio" type="number"></v-text-field>
               
-              <!-- Campo para subir la imagen del Skin -->
               <v-file-input
                 v-model="newEditSkin.imageFile"
                 label="Selecciona la Imagen"
@@ -93,7 +85,6 @@
                 hint="Máximo 1 MB"
               ></v-file-input>
 
-              <!-- Campo para subir el asset bundler -->
               <v-file-input
                 v-model="newEditSkin.assetBundleFile"
                 label="Selecciona el Asset Bundler"
@@ -103,7 +94,6 @@
                 hint="Máximo 5 MB"
               ></v-file-input>
 
-              <!-- Vista previa de la imagen seleccionada -->
               <v-img v-if="newEditSkin.imagePreview" :src="newEditSkin.imagePreview" height="200px" class="mt-3"></v-img>
             </v-card-text>
             <v-card-actions>
@@ -141,9 +131,8 @@ const newEditSkin = ref({
 
 const fetchSkins = async () => {
   try {
-    const response = await fetch('http://localhost:3002/api/skins'); // URL de la API de usuarios
+    const response = await fetch('http://localhost:3002/api/skins');
     const data = await response.json();
-    console.log(data);
     if (data.skins) {
       skins.value = data.skins;
     } else {
@@ -152,7 +141,7 @@ const fetchSkins = async () => {
   } catch (error) {
     console.error('Error al obtener productos:', error);
   } finally {
-    loading.value = false; // Terminar la carga
+    loading.value = false;
   }
 };
 
@@ -160,14 +149,12 @@ onMounted(() => {
   fetchSkins();
 });
 
-// Función para alternar el estado de activo/inactivo de un producto
 const toggleProductStatus = (skin) => {
   skin.active = !skin.active;
 };
 
-// Función para abrir el modal de crear producto
 const openCreateModal = () => {
-  newSkin.value = { name: '', price: '', imageFile: null, assetBundleFile: null }; // Limpiar los campos
+  newSkin.value = { name: '', price: '', imageFile: null, assetBundleFile: null };
   createDialog.value = true;
 };
 
@@ -176,13 +163,12 @@ const openEditModal = async (skin) => {
     id: skin.id,
     name: skin.name,
     price: skin.price,
-    imageFile: null, // Deberías dejarlo en null ya que la imagen se actualiza
-    assetBundleFile: null, // Similar para el asset
+    imageFile: null,
+    assetBundleFile: null,
   };
   editDialog.value = true;
 }
 
-// Función para manejar la carga del producto
 const createSkin = async () => {
   if (!newSkin.value.name && !newSkin.value.price && !newSkin.value.imageFile && !newSkin.value.assetBundleFile) {
     alert('Por favor completa todos los campos.');
@@ -211,7 +197,6 @@ const createSkin = async () => {
       alert(data.message || 'Hubo un error al crear el skin');
     }
   } catch (error) {
-    console.error('Error al crear skin:', error);
     alert('Hubo un problema con la conexión al servidor.');
   }
 };
@@ -241,7 +226,6 @@ const editSkin = async () => {
       alert(data.message || 'Hubo un error al editar la skin');
     }
   } catch (error) {
-    console.error('Error al editar la skin:', error);
     alert('Hubo un problema con la conexión al servidor.');
   }
 };

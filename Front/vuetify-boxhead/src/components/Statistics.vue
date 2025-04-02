@@ -12,7 +12,6 @@
 
         <v-row>
           <v-col cols="12" md="4">
-            <!-- Campo para ingresar el email -->
             <v-text-field 
               v-model="email" 
               label="Introduce el email" 
@@ -24,7 +23,6 @@
         </v-row>
 
         <v-row>
-          <!-- Mostrar las imágenes obtenidas -->
           <v-col v-for="(image, index) in images" :key="index" cols="12" md="4">
             <v-card @click="openImage(image)">
               <v-img :src="`http://localhost:3002${image}`"></v-img>
@@ -32,7 +30,6 @@
           </v-col>
         </v-row>
         
-        <!-- Modal para ver la imagen en detalle -->
         <v-dialog v-model="imageDialog">
           <v-card>
             <v-img :src="selectedImage" height="500px"></v-img>
@@ -55,7 +52,6 @@ const loading = ref(false);
 const imageDialog = ref(false);
 const selectedImage = ref('');
 
-// Función para obtener las estadísticas (imágenes) del servidor
 const fetchStatistics = async () => {
   if (!email.value) {
     alert('Por favor ingresa un email.');
@@ -82,14 +78,12 @@ const fetchStatistics = async () => {
       images.value = [];
     }
   } catch (error) {
-    console.error('Error al obtener las estadísticas:', error);
     alert('Hubo un error al obtener las imágenes');
   } finally {
     loading.value = false;
   }
 };
 
-// Función para abrir el modal con la imagen seleccionada
 const openImage = (image) => {
   selectedImage.value = `http://localhost:3002${image}`;
   imageDialog.value = true;

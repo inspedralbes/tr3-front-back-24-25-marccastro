@@ -1,6 +1,5 @@
 const socket = new WebSocket("ws://localhost:3002");
 
-// Evento cuando se conecta
 socket.onopen = () => {
   console.log("Conectado al servidor WebSocket");
   socket.send(JSON.stringify({
@@ -9,16 +8,15 @@ socket.onopen = () => {
   }));
 };
 
-export const functionSocket = (save, character, newHealth, newSpeed, newDamage, newColor) => {
+export const functionUpdateEnemy = (save, nameCharacter, newHealth, newSpeed, newDamage, newColor) => {
   if (socket.readyState === WebSocket.OPEN) {
-    console.log("Enviado");
 
     let data = {
       event_backend: "send-to-unity",
       event_unity: "stats-update",
       payload: {
         save: save.value,
-        name: character.value,
+        name: nameCharacter,
         health: newHealth.value,
         speed: newSpeed.value,
         damage: newDamage.value,
@@ -26,18 +24,35 @@ export const functionSocket = (save, character, newHealth, newSpeed, newDamage, 
       }
     };
 
-    console.log(data);
-
-    socket.send(JSON.stringify(data)); // Enviar JSON correctamente estructurado
+    socket.send(JSON.stringify(data));
   } else {
     console.error("WebSocket no está conectado.");
   }
 };
 
+export const functionUpdatePlayer = (nameCharacter, newHealth, newSpeed) => {
+  if (socket.readyState === WebSocket.OPEN) {
+    let data = {
+      event_backend: "send-to-unity",
+      event_unity: "stats-update",
+      payload: {
+        save: null,
+        name: nameCharacter,
+        health: newHealth.value,
+        speed: newSpeed.value,
+        damage: null,
+        color: null
+      }
+    };
+
+    socket.send(JSON.stringify(data));
+  } else {
+    console.error("WebSocket no está conectado.");
+  }
+}
+
 export const functionSocketRestart = () => {
   if(socket.readyState === WebSocket.OPEN) {
-    console.log("Enviado2");
-
     let data = {
       event_backend: "send-to-unity",
       event_unity: "stats_restart",

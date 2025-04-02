@@ -87,17 +87,13 @@ const submitForm = async () => {
     const data = await response.json();
 
     if (response.ok) {
-      console.log('Respuesta del servidor:', data);
-
       localStorage.setItem('token', 'Admin');
       
       router.push('/dashboard');
     } else {
-      console.error('Error en la autenticación:', data);
       alert(data.message || 'Error en la autenticación');
     }
   } catch (error) {
-    console.error('Error en la petición:', error);
     alert('Hubo un problema con la conexión al servidor.');
   }
 };

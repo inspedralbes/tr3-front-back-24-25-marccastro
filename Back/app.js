@@ -19,7 +19,6 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
   origin: 'http://localhost:7001',
-  // origin: '*',
   methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
@@ -46,14 +45,12 @@ mongoose.connect(process.env.MONGODB_URI, {
 .then(() => console.log('Connectat a MongoDB'))
 .catch((err) => console.error('Error al connectar a MongoDB', err));
 
-// Rutas
 app.use("/api", apiusers);
 app.use("/api/users", apiusers);
 app.use("/api/skins", api_skins);
 app.use("/api/purchases", api_purchases);
 app.use("/api/stats", apistats);
 
-// Servidor WebSocket
 const wss = new WebSocketServer({ server });
 
 const clients = {};
@@ -61,10 +58,9 @@ const clients = {};
 wss.on("connection", (ws) => {
   console.log("Un cliente se ha conectado");
 
-  // Al recibir un mensaje del cliente
   ws.on("message", (message) => {
     if (Buffer.isBuffer(message)) {
-      message = message.toString();  // Convertir Buffer a string
+      message = message.toString();
     }
 
     try {
@@ -84,13 +80,13 @@ wss.on("connection", (ws) => {
           }
 
           for(const id in clients) {
+            console.log(clients[id].tipo);
             if (clients[id].tipo === "unity") {
               clients[id].socket.send(JSON.stringify({
                 event_unity: data.event_unity,
                 payload: data.payload
               }));
             }
-            else console.log("No esta");
           }
           break;
         
@@ -102,7 +98,6 @@ wss.on("connection", (ws) => {
     }
   });
 
-  // Cuando un cliente se desconecta
   ws.on("close", () => {
     for (const id in clients) {
       if (clients[id].socket === ws) {
@@ -114,7 +109,6 @@ wss.on("connection", (ws) => {
   });
 });
 
-// Sincronización de la base de datos
 sequelize
   .sync()
   .then(() => {

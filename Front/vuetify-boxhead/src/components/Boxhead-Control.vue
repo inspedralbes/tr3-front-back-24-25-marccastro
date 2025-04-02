@@ -10,21 +10,21 @@
           <v-col cols="12" md="6">
             <v-card>
               <v-card-title>
-                <span class="headline">Control de Personajes</span>
+                <span class="headline">Control de Personatges</span>
               </v-card-title>
               <v-card-subtitle>
-                Ajusta los atributos de los personajes en tiempo real.
+                Ajusta els atributs dels personatges a temps real.
               </v-card-subtitle>
               <v-card-text>
                 <v-select
                   v-model="selectedCharacter"
                   :items="characters"
-                  label="Seleccionar Personaje"
+                  label="Seleccionar Personatge"
                   outlined
                 ></v-select>
                 <v-slider
                   v-model="health"
-                  label="Health"
+                  label="Vida"
                   :min="1"
                   :max="100"
                   step="1"
@@ -32,23 +32,23 @@
                 ></v-slider>
                 <v-slider
                   v-model="speed"
-                  label="Speed"
+                  label="Velocitat"
                   :min="1"
                   :max="10"
                   step="0.1"
                   thumb-label
                 ></v-slider>
                 <v-slider
-                  v-if="selectedCharacter != 'Player'"
+                  v-if="selectedCharacter != 'Jugador'"
                   v-model="damage"
-                  label="Damage"
+                  label="Dany"
                   :min="10"
                   :max="100"
                   step="5"
                   thumb-label
                 ></v-slider>
                 <v-select
-                  v-if="selectedCharacter != 'Player'"
+                  v-if="selectedCharacter != 'Jugador'"
                   v-model="colorName"
                   :items="colorNames"
                   label="Seleccionar Color"
@@ -56,9 +56,10 @@
                 ></v-select>
               </v-card-text>
               <v-card-actions>
-                <v-btn @click="updateCharacter">Actualizar Personaje</v-btn>
-                <v-btn v-if="selectedCharacter != 'Player'" @click="saveConfiguration">Guardar Configuración</v-btn>
-                <v-btn v-if="selectedCharacter != 'Player'" @click="restartCharacter">Restaurar Personaje</v-btn>
+                <v-btn v-if="selectedCharacter == 'Jugador'" @click="functionPlayer">Actualitzar Configuració</v-btn>
+                <v-btn v-if="selectedCharacter != 'Jugador'" @click="functionEnemy">Actualitzar Configuració</v-btn>
+                <v-btn v-if="selectedCharacter != 'Jugador'" @click="saveConfiguration">Desa Configuració</v-btn>
+                <v-btn v-if="selectedCharacter != 'Jugador'" @click="restartCharacter">Restaurar Configuració</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -70,57 +71,70 @@
 
 <script setup>
 import { ref } from 'vue';
-import { functionSocket, functionSocketRestart } from '../services/socketManager';
+import { functionUpdateEnemy, functionUpdatePlayer, functionSocketRestart } from '../services/socketManager';
 
-// Atributos de control
-const health = ref(50); // Valor predeterminado
-const speed = ref(5); // Valor predeterminado
-const damage = ref(20); // Valor predeterminado
-const selectedCharacter = ref(null); // Nombre del personaje seleccionado
-const characters = ref(['Player', 'Zombie', 'FatZombie']); // Personajes disponibles
+const health = ref(50);
+const speed = ref(5);
+const damage = ref(20);
+const selectedCharacter = ref(null);
+const characters = ref(['Jugador', 'Zombi', 'Zombie Gordo']);
 const save = ref(false);
 
-// Selector para el color (por nombre)
-const colorName = ref(''); // Valor predeterminado
-const colorNames = ref(['White', 'Rojo', 'Azul', 'Verde']); // Colores por nombre
+const colorName = ref('');
+const colorNames = ref(['Blanc', 'Vermell', 'Blau', 'Verd']);
 
-// Función para convertir el nombre del color a su valor hexadecimal
+const getCharacter = (character) => {
+  switch (character) {
+    case 'Jugador':
+      return 'Player'
+    case 'Zombi':
+      return 'Zombie';
+    case 'Zombi Gordo':
+      return 'FatZombie';
+    default:
+      return 'Player';
+  }
+}
+
 const getColorHex = (color) => {
   switch (color) {
-    case 'White':
+    case 'Blanc':
       return 'FFFFFF'
-    case 'Rojo':
+    case 'Vermell':
       return 'FF0000';
-    case 'Azul':
+    case 'Blau':
       return '0000FF';
-    case 'Verde':
+    case 'Verd':
       return '008000';
     default:
-      return 'FFFFFF'; // Blanco como color predeterminado
+      return 'FFFFFF';
   }
 };
 
-const updateCharacter = () => {
+const functionEnemy = () => {
   if (selectedCharacter.value && colorName.value) {
-    // Convertir el color a hexadecimal
     const colorHex = getColorHex(colorName.value);
-    save.value = false;  // Indicamos que es una actualización, no un guardado
+    const nameCharacter = getCharacter(selectedCharacter.value);
+    save.value = false;
 
-    // Llamamos a la función para enviar los datos al servidor
-    functionSocket(save, selectedCharacter, health, speed, damage, colorHex);
+    functionUpdateEnemy(save, nameCharacter, health, speed, damage, colorHex);
   } else {
-    console.error("Por favor selecciona un personaje y un color.");
+    alert("Seleccioneu un personatge i un color.");
   }
 };
+
+const functionPlayer = () => {
+  const nameCharacter = getCharacter(selectedCharacter.value);
+  functionUpdatePlayer(nameCharacter, health, speed);
+}
 
 const saveConfiguration = () => {
   if (selectedCharacter.value && colorName.value) {
-    // Convertir el color a hexadecimal
     const colorHex = getColorHex(colorName.value);
-    save.value = true;  // Indicamos que estamos guardando la configuración
+    const nameCharacter = getCharacter(selectedCharacter.value);
+    save.value = true;
     
-    // Llamamos a la función para enviar los datos al servidor
-    functionSocket(save, selectedCharacter, health, speed, damage, colorHex);
+    functionUpdateEnemy(save, nameCharacter, health, speed, damage, colorHex);
   } else {
     console.error("Por favor selecciona un personaje y un color.");
   }
