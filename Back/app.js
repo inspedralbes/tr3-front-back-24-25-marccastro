@@ -56,8 +56,6 @@ const wss = new WebSocketServer({ server });
 const clients = {};
 
 wss.on("connection", (ws) => {
-  console.log("Un cliente se ha conectado");
-
   ws.on("message", (message) => {
     if (Buffer.isBuffer(message)) {
       message = message.toString();
@@ -65,17 +63,16 @@ wss.on("connection", (ws) => {
 
     try {
       const data = JSON.parse(message);
-      console.log("Datos recibidos:", data);
 
       switch (data.event_backend) {
         case "register":
           clients[data.payload.id] = { socket: ws, tipo: data.payload.tipo };
-          console.log(`Cliente registrado: ${data.payload.id} (${data.payload.tipo})`);
+          console.log(`Client registrat: ${data.payload.id} (${data.payload.tipo})`);
           break;
 
         case "send-to-unity":
           if (!data.payload) {
-            console.error("Error: El mensaje de send-to-unity no tiene payload");
+            console.error("Error: El missatge de send-to-unity no té payload");
             return;
           }
 
@@ -91,7 +88,7 @@ wss.on("connection", (ws) => {
           break;
         
         default:
-          console.log("Evento desconocido", data);
+          console.log("Esdeveniment desconegut", data);
       }
     } catch (error) {
       console.error("Error al procesar mensaje:", error);
@@ -101,7 +98,7 @@ wss.on("connection", (ws) => {
   ws.on("close", () => {
     for (const id in clients) {
       if (clients[id].socket === ws) {
-        console.log(`Cliente ${id} desconectado`);
+        console.log(`Client ${id} desconectat`);
         delete clients[id];
         break;
       }
@@ -112,9 +109,9 @@ wss.on("connection", (ws) => {
 sequelize
   .sync()
   .then(() => {
-    console.log("Base de datos sincronizada.");
+    console.log("Base de dades sincronitzada.");
     server.listen(PORT, () => {
-      console.log(`Servidor funcionando en http://localhost:${PORT}`);
+      console.log(`Servidor funcionan en http://localhost:${PORT}`);
     });
   })
-  .catch((err) => console.error("Error sincronizando la base de datos:", err));
+  .catch((err) => console.error("Error sincronitzant la base de dades:", err));

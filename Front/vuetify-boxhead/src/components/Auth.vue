@@ -2,28 +2,28 @@
   <v-container class="fill-height d-flex justify-center align-center">
     <v-card class="pa-5" width="400">
       <v-card-title class="text-center text-h5">
-        {{ isLogin ? "Iniciar Sesión" : "Registrarse" }}
+        {{ isLogin ? "Iniciar Sessió" : "Registrar-se" }}
       </v-card-title>
 
       <v-form ref="form" v-model="valid">
         <v-text-field
           v-if="!isLogin"
           v-model="username"
-          label="Username"
+          label="Nom d'usuari"
           prepend-icon="mdi-account"
           outlined
         ></v-text-field>
 
         <v-text-field 
           v-model="email"
-          label="Correo Electrónico"
+          label="Email"
           prepend-icon="mdi-email"
           outlined
         ></v-text-field>
 
         <v-text-field 
           v-model="password"
-          label="Contraseña"
+          label="Contrasenya"
           :type="showPassword ? 'text' : 'password'"
           prepend-icon="mdi-lock"
           :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
@@ -34,18 +34,18 @@
         <v-text-field 
           v-if="!isLogin"
           v-model="confirmPassword"
-          label="Confirmar Contraseña"
+          label="Confirmar Contrasenya"
           :type="showPassword ? 'text' : 'password'"
           prepend-icon="mdi-lock"
           outlined
         ></v-text-field>
 
         <v-btn block color="primary" class="mt-3" @click="submitForm">
-          {{ isLogin ? "Ingresar" : "Registrarse" }}
+          {{ isLogin ? "Ingressar" : "Registrar-se" }}
         </v-btn>
 
         <v-btn text block color="secondary" class="mt-2" @click="isLogin = !isLogin">
-          {{ isLogin ? "¿No tienes cuenta? Regístrate" : "¿Ya tienes cuenta? Inicia sesión" }}
+          {{ isLogin ? "No tens compte? Registra't" : "Ja tens compte? Inicia sessió" }}
         </v-btn>
       </v-form>
     </v-card>
@@ -91,10 +91,10 @@ const submitForm = async () => {
       
       router.push('/dashboard');
     } else {
-      alert(data.message || 'Error en la autenticación');
+      alert(data.message || "Error en autenticació");
     }
   } catch (error) {
-    alert('Hubo un problema con la conexión al servidor.');
+    alert('Hi va haver un problema amb la connexió al servidor.');
   }
 };
 </script>

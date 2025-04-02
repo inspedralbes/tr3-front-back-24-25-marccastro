@@ -10,12 +10,12 @@ router.post('/new-purchase', async (req, res) => {
         // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ where: { email } });
         if (!existingUser) {
-            return res.json({ message: "No hay ningun usuario con ese correo" });
+            return res.json({ message: "No hi ha cap usuari amb aquest correu" });
         }
         
         const existingSkin = await Skin.findOne({ where: skinId });
         if (!existingSkin) {
-            return res.json({ message: "No hay ningun skin con esa id" });
+            return res.json({ message: "No hi ha cap skin amb aquesta id" });
         }
         
         await PurchaseHistory.create({ user_id: existingUser.id, skin_id: existingSkin.id, price: existingSkin.price });
@@ -23,8 +23,8 @@ router.post('/new-purchase', async (req, res) => {
         return res.status(201).json({ message: "success" });
 
     } catch (error) {
-        console.error("Error en el registro:", error);
-        return res.status(500).json({ message: "Error interno del servidor" });
+        console.error("Error al registre:", error);
+        return res.status(500).json({ message: "Error intern del servidor" });
     }
 });
 
@@ -35,7 +35,7 @@ router.post('/history', async (req, res) => {
         const existingUser = await User.findOne({ where: { email } })
 
         if (!existingUser) {
-            return res.status(404).json({ message: "Usuario no encontrado" });
+            return res.status(404).json({ message: "Usuari no trobat" });
         }
 
         const existingPurchase = await PurchaseHistory.findOne({ where: { skin_id: skinId, user_id: existingUser.id }});
@@ -43,12 +43,12 @@ router.post('/history', async (req, res) => {
             return res.status(201).json({ message: "success" });
         }
         else {
-            return res.status(404).json({ message: "Compra no encontrada para este usuario y skin" });
+            return res.status(404).json({ message: "Compra no trobada per a aquest usuari i skin" });
         }
     }
     catch (error) {
-        console.error("Error en la consulta:", error);
-        res.status(500).json({ message: "Error interno del servidor" });
+        console.error("Error a la consulta:", error);
+        res.status(500).json({ message: "Error intern del servidor" });
     }
 });
 

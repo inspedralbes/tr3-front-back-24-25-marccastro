@@ -17,7 +17,7 @@ export default (sequelize) => {
     },
     imagePath: {
       type: DataTypes.STRING,
-      allowNull: true, // Guardaremos la ruta de la imagen
+      allowNull: true,
     },
     assetBundlePath: {
       type: DataTypes.STRING,

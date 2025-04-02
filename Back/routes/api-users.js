@@ -17,13 +17,11 @@ router.post('/register', async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ where: { username } });
         if (existingUser) {
             return res.json({ message: "Ja existeix un usuari amb aquest nom" });
         }
 
-        // Verificar si el email ya está registrado
         const existingEmail = await User.findOne({ where: { email } });
         if (existingEmail) {
             return res.status(401).json({ message: "El correu electrònic ja està en ús" });
@@ -37,8 +35,8 @@ router.post('/register', async (req, res) => {
         return res.status(201).json({ message: "success", email: email });
 
     } catch (error) {
-        console.error("Error en el registro:", error);
-        return res.status(500).json({ message: "Error interno del servidor" });
+        console.error("Error en el registra:", error);
+        return res.status(500).json({ message: "Error intern del servidor" });
     }
 });
 
@@ -51,7 +49,6 @@ router.post('/register/administraction', async (req, res) => {
             return res.status(401).json({ message: "Ja existeix un usuari amb aquest nom" });
         }
 
-        // Verificar si el email ya está registrado
         const existingEmail = await User.findOne({ where: { email } });
         if (existingEmail) {
             return res.status(401).json({ message: "El correu electrònic ja està en ús" });
@@ -60,13 +57,12 @@ router.post('/register/administraction', async (req, res) => {
         const hardPassword = await bcrypt.hash(password, 10);
         const emailFolder = `/statistics/images/${email.replace(/[@.]/g, "_")}`;
 
-        // Crear el usuario
         await User.create({ username, email, password: hardPassword, admin: 1, statistics: emailFolder });
 
         return res.status(201).json({ message: "success" });
 
     } catch (error) {
-        console.error("Error en el registro:", error);
+        console.error("Error en el registra:", error);
         return res.status(500).json({ message: "Error interno del servidor" });
     }
 });
@@ -77,6 +73,8 @@ router.post('/login', async (req, res) => {
 
         const user = await User.findOne({ where: { username } });
 
+        if(!user) return res.status(401).json({ message: "No existeix cap usuari amb aquest email." });
+
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.json({ message: "Usuari o contrasenya incorrecta" });
         }
@@ -84,8 +82,8 @@ router.post('/login', async (req, res) => {
         return res.status(201).json({ message: "success", email: user.email });
 
     } catch (error) {
-        console.error("Error en login:", error);
-        return res.status(500).json({ message: "Error interno del servidor" });
+        console.error("Error en Inicia sessió:", error);
+        return res.status(500).json({ message: "Error intern del servidor" });
     }
 });
 
@@ -95,18 +93,20 @@ router.post('/login/administraction', async (req, res) => {
 
         const user = await User.findOne({ where: { email } });
 
+        if(!user) return res.status(401).json({ message: "No existeix cap usuari amb aquest email." });
+
         if(user.admin != 1) {
             return res.status(401).json({ message: "No ets administrador"});
         } 
     
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ message: "Usuari o contrasenya incorrecta" });
+            return res.status(401).json({ message: "Usuari o contrasenya incorrectes" });
         }
   
         return res.status(201).json({ message: "success" });
     } catch (error) {
-        console.error("Error en login:", error);
-        return res.status(500).json({ message: "Error interno del servidor" });
+        console.error("Error en Inicia sessió:", error);
+        return res.status(500).json({ message: "Error intern del servidor" });
     }
 });
 
@@ -120,7 +120,7 @@ router.delete('/delete-user', async (req, res) => {
 
         res.status(200).json({ message: 'Usuari eliminat correctament' });
     } catch(error) {
-        res.status(500).json({ message: 'Error en eliminar l\'usuari' });
+        res.status(500).json({ message: "Error en eliminar l'usuari" });
     }
 });
 

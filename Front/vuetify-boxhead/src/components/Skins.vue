@@ -7,7 +7,7 @@
     <v-main>
       <v-container>
         <v-alert v-if="loading" type="info" dismissible>
-          Cargando skins...
+          Cargan skins...
         </v-alert>
         <v-row>
           <v-col cols="12" md="4">
@@ -21,11 +21,7 @@
               <v-card-title>{{ skin.name }}</v-card-title>
               <v-card-subtitle>{{ skin.price }}€</v-card-subtitle>
               <v-card-actions>
-                <!-- Botón de activar/desactivar producto -->
-                <v-btn @click="toggleProductStatus(skin)" color="primary">
-                  {{ skin.active ? 'Desactivar' : 'Activar' }}
-                </v-btn>
-                <v-btn @click="openEditModal(skin)" max-width="500px">Edit</v-btn>
+                <v-btn @click="openEditModal(skin)" max-width="500px">Edita</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -34,35 +30,33 @@
         <v-dialog v-model="createDialog" max-width="500px">
           <v-card>
             <v-card-title>
-              <span class="headline">Crear Nuevo Skin</span>
+              <span class="headline">Crear Nova Skin</span>
             </v-card-title>
             <v-card-text>
-              <v-text-field v-model="newSkin.name" label="Nombre de la Skin"></v-text-field>
-              <v-text-field v-model="newSkin.price" label="Precio" type="number"></v-text-field>
+              <v-text-field v-model="newSkin.name" label="Nom de la Skin"></v-text-field>
+              <v-text-field v-model="newSkin.price" label="Preu" type="number"></v-text-field>
               
               <v-file-input
                 v-model="newSkin.imageFile"
-                label="Selecciona la Imagen"
-                accept="image/*"
+                label="Selecciona una imatge"
                 outlined
                 :show-size="1000"
-                hint="Máximo 1 MB"
+                hint="Màxim 1 MB"
               ></v-file-input>
 
               <v-file-input
                 v-model="newSkin.assetBundleFile"
-                label="Selecciona el Asset Bundler"
-                accept=".bundle,.assetbundle"
+                label="Selecciona un fitxer Asset Bundler"
                 outlined
                 :show-size="5000"
-                hint="Máximo 5 MB"
+                hint="Màxim 5 MB"
               ></v-file-input>
 
               <v-img v-if="newSkin.imagePreview" :src="newSkin.imagePreview" height="200px" class="mt-3"></v-img>
             </v-card-text>
             <v-card-actions>
               <v-btn @click="createSkin" color="success">Crear</v-btn>
-              <v-btn @click="createDialog = false" color="red">Cancelar</v-btn>
+              <v-btn @click="createDialog = false" color="red">Cancel·la</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -70,35 +64,33 @@
         <v-dialog v-model="editDialog" max-width="500px">
           <v-card>
             <v-card-title>
-              <span class="headline">Editar Skin</span>
+              <span class="headline">Edita Skin</span>
             </v-card-title>
             <v-card-text>
-              <v-text-field v-model="newEditSkin.name" label="Nombre de la Skin"></v-text-field>
-              <v-text-field v-model="newEditSkin.price" label="Precio" type="number"></v-text-field>
+              <v-text-field v-model="newEditSkin.name" label="Nom de la Skin"></v-text-field>
+              <v-text-field v-model="newEditSkin.price" label="Preu" type="number"></v-text-field>
               
               <v-file-input
                 v-model="newEditSkin.imageFile"
-                label="Selecciona la Imagen"
-                accept="image/*"
+                label="Selecciona una imatge"
                 outlined
                 :show-size="1000"
-                hint="Máximo 1 MB"
+                hint="Màxim 1 MB"
               ></v-file-input>
 
               <v-file-input
                 v-model="newEditSkin.assetBundleFile"
-                label="Selecciona el Asset Bundler"
-                accept=".bundle,.assetbundle"
+                label="Selecciona un fitxer Asset Bundler"
                 outlined
                 :show-size="5000"
-                hint="Máximo 5 MB"
+                hint="Màxim 5 MB"
               ></v-file-input>
 
               <v-img v-if="newEditSkin.imagePreview" :src="newEditSkin.imagePreview" height="200px" class="mt-3"></v-img>
             </v-card-text>
             <v-card-actions>
-              <v-btn @click="editSkin" color="success">Editar</v-btn>
-              <v-btn @click="editDialog = false" color="red">Cancelar</v-btn>
+              <v-btn @click="editSkin" color="success">Edita</v-btn>
+              <v-btn @click="editDialog = false" color="red">Cancel·la</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -149,10 +141,6 @@ onMounted(() => {
   fetchSkins();
 });
 
-const toggleProductStatus = (skin) => {
-  skin.active = !skin.active;
-};
-
 const openCreateModal = () => {
   newSkin.value = { name: '', price: '', imageFile: null, assetBundleFile: null };
   createDialog.value = true;
@@ -171,7 +159,7 @@ const openEditModal = async (skin) => {
 
 const createSkin = async () => {
   if (!newSkin.value.name && !newSkin.value.price && !newSkin.value.imageFile && !newSkin.value.assetBundleFile) {
-    alert('Por favor completa todos los campos.');
+    alert('Si us plau completa tots els camps.');
     return;
   }
 
@@ -190,14 +178,14 @@ const createSkin = async () => {
     const data = await response.json();
 
     if (response.ok) {
-      alert('Skin creado con éxito');
+      alert('Skin creat amb èxit');
       fetchSkins();
       createDialog.value = false;
     } else {
-      alert(data.message || 'Hubo un error al crear el skin');
+      alert(data.message || "Hi va haver un error en crear la skin");
     }
   } catch (error) {
-    alert('Hubo un problema con la conexión al servidor.');
+    alert('Hi va haver un problema amb la connexió al servidor.');
   }
 };
 

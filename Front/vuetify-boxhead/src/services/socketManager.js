@@ -25,6 +25,7 @@ export const functionUpdateEnemy = (save, nameCharacter, newHealth, newSpeed, ne
     };
 
     socket.send(JSON.stringify(data));
+    alert("Enviat noves característiques amb èxit");
   } else {
     console.error("WebSocket no está conectado.");
   }
@@ -46,6 +47,7 @@ export const functionUpdatePlayer = (nameCharacter, newHealth, newSpeed) => {
     };
 
     socket.send(JSON.stringify(data));
+    alert("Guardat les noves característiques amb èxit");
   } else {
     console.error("WebSocket no está conectado.");
   }
@@ -67,6 +69,7 @@ export const functionSocketRestart = () => {
     }
 
     socket.send(JSON.stringify(data));
+    alert("Restauració de les característiques amb èxit");
   }
   else {
     console.error("WebSocket no está conectado.");

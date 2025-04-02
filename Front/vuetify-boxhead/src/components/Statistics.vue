@@ -1,24 +1,24 @@
 <template>
   <v-app>
     <v-app-bar>
-      <v-toolbar-title>Estadísticas del Usuario</v-toolbar-title>
+      <v-toolbar-title>Estadístiques de l'Usuari</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
       <v-container>
         <v-alert v-if="loading" type="info" dismissible>
-          Cargando imágenes...
+          Cargan imatges...
         </v-alert>
 
         <v-row>
           <v-col cols="12" md="4">
             <v-text-field 
               v-model="email" 
-              label="Introduce el email" 
+              label="Introdueix el correu electrònic" 
               outlined
               @keyup.enter="fetchStatistics"
             ></v-text-field>
-            <v-btn @click="fetchStatistics">Search</v-btn>
+            <v-btn @click="fetchStatistics">Cerca</v-btn>
           </v-col>
         </v-row>
 
@@ -34,7 +34,7 @@
           <v-card>
             <v-img :src="selectedImage" height="500px"></v-img>
             <v-card-actions>
-              <v-btn color="red" text @click="imageDialog = false">Cerrar</v-btn>
+              <v-btn color="red" text @click="imageDialog = false">Tancar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -54,7 +54,7 @@ const selectedImage = ref('');
 
 const fetchStatistics = async () => {
   if (!email.value) {
-    alert('Por favor ingresa un email.');
+    alert('Si us plau, introduïu un correu electrònic.');
     return;
   }
 
@@ -74,11 +74,11 @@ const fetchStatistics = async () => {
     if (response.ok) {
       images.value = data.images || [];
     } else {
-      alert(data.message || 'No se encontraron imágenes para este usuario');
+      alert(data.message || "No s'han trobat imatges per aquest usuari");
       images.value = [];
     }
   } catch (error) {
-    alert('Hubo un error al obtener las imágenes');
+    alert('Hi va haver un error en obtenir les imatges');
   } finally {
     loading.value = false;
   }

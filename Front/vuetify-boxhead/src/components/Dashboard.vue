@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer app permanent>
       <v-list>
-        <v-list-item title="Dashboard Boxhead"></v-list-item>
+        <v-list-item title="Tauler de control Boxhead"></v-list-item>
         <v-list-item 
           v-for="(item, index) in menuItems" 
           :key="index" 
@@ -15,7 +15,9 @@
         </v-list-item>
       </v-list>
       <div class="pa-2">
-        <v-btn block @click="logout"> Logout </v-btn>
+        <v-btn block href="http://localhost:9000/#!/auth" target="_blank">Microserveis</v-btn>
+        <br>
+        <v-btn block @click="logout">Tanca sessió</v-btn>
       </div>
     </v-navigation-drawer>
 

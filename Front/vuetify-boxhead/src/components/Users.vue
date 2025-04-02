@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-alert v-if="loading" type="info" dismissible>
-      Cargando usuarios...
+      Cargan usuaris...
     </v-alert>
 
     <v-data-table
@@ -13,18 +13,18 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Usuarios Registrados</v-toolbar-title>
+          <v-toolbar-title>Usuaris Registrats</v-toolbar-title>
         </v-toolbar>
       </template>
 
       <template v-slot:item.actions="{ item }">
-        <v-btn @click="editUser(item)" color="yellow" small>Edit</v-btn>
-        <v-btn @click="deleteUser(item)" color="red" small>Delete</v-btn>
+        <v-btn @click="editUser(item)" color="yellow" small>Edita</v-btn>
+        <v-btn @click="deleteUser(item)" color="red" small>Eliminar</v-btn>
       </template>
     </v-data-table>
 
     <v-alert v-if="!loading && users.length === 0" type="warning">
-      No hay usuarios registrados.
+      No hi ha usuaris registrats.
     </v-alert>
   </v-container>
 </template>
@@ -33,10 +33,10 @@
 import { ref, onMounted } from 'vue';
 
 const headers = [
-  { text: 'Nombre', align: 'start', key: 'username', sortable: true },
-  { text: 'Correo', align: 'start', key: 'email', sortable: true },
-  { text: 'Admin', align: 'start', key: 'admin', sortable: true },
-  { text: 'Acciones', align: 'center', key: 'actions', sortable: false }
+  { text: 'Nom', align: 'start', key: 'username', sortable: true },
+  { text: 'Email', align: 'start', key: 'email', sortable: true },
+  { text: 'Administrador', align: 'start', key: 'admin', sortable: true },
+  { text: 'Accions', align: 'center', key: 'actions', sortable: false }
 ];
 
 const users = ref([]);
@@ -48,7 +48,7 @@ const fetchUsers = async () => {
     const data = await response.json();
     users.value = data;
   } catch (error) {
-    console.error('Error al obtener usuarios:', error);
+    console.error('Error en obtenir els usuaris:', error);
   } finally {
     loading.value = false;
   }
@@ -75,13 +75,13 @@ const deleteUser = async (user) => {
     const data = await response.json();
 
     if (response.ok) {
-      alert('Usuario eliminado con éxito');
+      alert('Usuari eliminat amb èxit');
       fetchUsers();
     } else {
-      alert(data.message || 'Hubo un error al eliminar el usuario');
+      alert(data.message || "Hi va haver un error en eliminar l'usuari");
     }
   } catch (error) {
-    console.error('Error al eliminar usuario:', error);
+    console.error("Error en eliminar l'usuari:", error);
   }
 };
 </script>

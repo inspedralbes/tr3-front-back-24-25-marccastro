@@ -1,14 +1,14 @@
 <template>
   <v-app>
     <v-app-bar>
-      <v-toolbar-title>Boxhead Control</v-toolbar-title>
+      <v-toolbar-title>Panell de característiques</v-toolbar-title>
     </v-app-bar>
 
     <v-main>
       <v-container>
         <v-row>
           <v-col cols="12" md="6">
-            <v-card>
+            <v-card class="pa-4" style="min-width: 700px;">
               <v-card-title>
                 <span class="headline">Control de Personatges</span>
               </v-card-title>
@@ -28,7 +28,7 @@
                   :min="1"
                   :max="100"
                   step="1"
-                  thumb-label
+                  thumb-label="always"
                 ></v-slider>
                 <v-slider
                   v-model="speed"
@@ -36,7 +36,7 @@
                   :min="1"
                   :max="10"
                   step="0.1"
-                  thumb-label
+                  thumb-label="always"
                 ></v-slider>
                 <v-slider
                   v-if="selectedCharacter != 'Jugador'"
@@ -45,7 +45,7 @@
                   :min="10"
                   :max="100"
                   step="5"
-                  thumb-label
+                  thumb-label="always"
                 ></v-slider>
                 <v-select
                   v-if="selectedCharacter != 'Jugador'"
@@ -66,6 +66,7 @@
         </v-row>
       </v-container>
     </v-main>
+    
   </v-app>
 </template>
 
@@ -136,7 +137,7 @@ const saveConfiguration = () => {
     
     functionUpdateEnemy(save, nameCharacter, health, speed, damage, colorHex);
   } else {
-    console.error("Por favor selecciona un personaje y un color.");
+    console.error("Seleccioneu un personatge i un color.");
   }
 };
 
