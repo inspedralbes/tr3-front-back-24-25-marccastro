@@ -17,6 +17,10 @@
       <div class="pa-2">
         <v-btn block href="http://localhost:9000/#!/auth" target="_blank">Microserveis</v-btn>
         <br>
+        <v-btn block color="success" prepend-icon="mdi-download" @click="downloadGame">
+          Descargar Videojoc
+        </v-btn>
+        <br>
         <v-btn block @click="logout">Tanca sessió</v-btn>
       </div>
     </v-navigation-drawer>
@@ -49,5 +53,22 @@ const menuItems = ref([
 const logout = () => {
   localStorage.removeItem('token');
   router.push('/');
+};
+
+const downloadGame = async () => {
+  try {
+    const response = await fetch(`http://localhost:3002/download/game`)
+    if (!response.ok) throw new Error('Error en la descarga');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'boxhead-game.zip';
+    link.click();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error al descargar:', error);
+    alert('No se pudo descargar el juego');
+  }
 };
 </script>

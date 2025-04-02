@@ -19,7 +19,7 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
   origin: 'http://localhost:7001',
-  methods: ['GET', 'POST', 'DELETE'],
+  methods: ['GET', 'POST', 'DELETE', 'DOWNLOAD'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }
 
@@ -105,6 +105,23 @@ wss.on("connection", (ws) => {
     }
   });
 });
+
+/*
+app.get('/download/game', (req, res) => {
+  try {
+    const filePath = path.join(__dirname, 'uploads/game/boxhead-game.zip'); // Ajusta la ruta
+    res.download(filePath, 'boxhead-game.zip', (err) => {
+      if (err) {
+        console.error('Error al descargar:', err);
+        res.status(500).send('Error al descargar el archivo');
+      }
+    });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Error interno del servidor');
+  }
+});
+*/
 
 sequelize
   .sync()
