@@ -15,9 +15,9 @@
         </v-list-item>
       </v-list>
       <div class="pa-2">
-        <v-btn block href="" target="_blank">Adminer</v-btn>
+        <v-btn block href="http://localhost:8080/?server=mysql" target="_blank">Adminer</v-btn>
         <br>
-        <v-btn block href="http://boxheadcontrol.dam.inspedralbes.cat:9443/#!/auth" target="_blank">Microserveis</v-btn>
+        <v-btn block href="http://localhost:9000/#!/auth" target="_blank">Microserveis</v-btn>
         <br>
         <v-btn block color="success" prepend-icon="mdi-download" @click="downloadGame">
           Descargar Videojoc
@@ -41,14 +41,16 @@ import BoxheadControl from './Boxhead-Control.vue';
 import Users from './Users.vue';
 import Skins from './Skins.vue';
 import Statistics from './Statistics.vue';
+import PurchaseHistory from './PurchaseHistory.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const selectedComponent = ref(BoxheadControl);
 const menuItems = ref([
   { icon: 'mdi-gamepad-variant', title: 'Boxhead Control', component: BoxheadControl },
-  { icon: 'mdi-account-group', title: 'Usuaris', component: Users },
   { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins },
+  { icon: 'mdi-account-group', title: 'Usuaris', component: Users },
+  { icon: 'mdi-cash-register', title: 'Historial de Compres', component: PurchaseHistory },
   { icon: 'mdi-chart-line', title: 'Estadistiques', component: Statistics}
 ]);
 
@@ -59,7 +61,7 @@ const logout = () => {
 
 const downloadGame = async () => {
   try {
-    const response = await fetch(`http://boxheadcontrol.dam.inspedralbes.cat:3002/download/game`)
+    const response = await fetch(`http://localhost:3002/download/game`)
     if (!response.ok) throw new Error('Error en la descarga');
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);

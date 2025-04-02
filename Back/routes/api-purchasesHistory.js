@@ -3,11 +3,31 @@ import { User, Skin, PurchaseHistory } from '../models/index.js';
 
 const router = express.Router();
 
+router.get('/', async (req, res) => {
+    try {
+        const purchases = await PurchaseHistory.findAll({
+            include: [
+                { model: Skin, attributes: ['name', 'imagePath'] },
+                { model: User, attributes: ['username', 'email'] }
+            ]
+        });
+
+        if (!purchases.length) {
+            return res.status(404).json({ message: "No hay compras registradas." });
+        }
+
+        res.status(201).json(purchases);
+    } catch (error) {
+        console.error("Error obteniendo historial de compras:", error);
+        res.status(500).json({ message: "Error en el servidor" });
+    }
+});
+
+
 router.post('/new-purchase', async (req, res) => {
     try {
         const { skinId, email } = req.body;
 
-        // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ where: { email } });
         if (!existingUser) {
             return res.json({ message: "No hi ha cap usuari amb aquest correu" });

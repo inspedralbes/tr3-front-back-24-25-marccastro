@@ -19,10 +19,6 @@ export default (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    admin: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
     statistics: {
       type: DataTypes.STRING,
       allowNull: false

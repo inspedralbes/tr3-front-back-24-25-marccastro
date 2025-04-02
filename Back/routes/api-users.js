@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
         const hardPassword = await bcrypt.hash(password, 10);
         const emailFolder = `/statistics/images/${email.replace(/[@.]/g, "_")}`;
 
-        await User.create({ username, email, password: hardPassword, admin: 0, statistics: emailFolder });
+        await User.create({ username, email, password: hardPassword, statistics: emailFolder });
 
         return res.status(201).json({ message: "success", email: email });
 
@@ -57,7 +57,7 @@ router.post('/register/administraction', async (req, res) => {
         const hardPassword = await bcrypt.hash(password, 10);
         const emailFolder = `/statistics/images/${email.replace(/[@.]/g, "_")}`;
 
-        await User.create({ username, email, password: hardPassword, admin: 1, statistics: emailFolder });
+        await User.create({ username, email, password: hardPassword, statistics: emailFolder });
 
         return res.status(201).json({ message: "success" });
 
@@ -94,10 +94,6 @@ router.post('/login/administraction', async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if(!user) return res.status(401).json({ message: "No existeix cap usuari amb aquest email." });
-
-        if(user.admin != 1) {
-            return res.status(401).json({ message: "No ets administrador"});
-        } 
     
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(401).json({ message: "Usuari o contrasenya incorrectes" });
@@ -109,6 +105,34 @@ router.post('/login/administraction', async (req, res) => {
         return res.status(500).json({ message: "Error intern del servidor" });
     }
 });
+
+router.put('/edit-user', async (req, res) => {
+    const { id, username, email, password } = req.body;
+  
+    if (!id || !username || !email) {
+      return res.status(400).json({ message: 'Faltan dades requerits' });
+    }
+  
+    try {
+      const user = await User.findByPk(id);
+      if (!user) {
+        return res.status(404).json({ message: 'Usuari no trobat' });
+      }
+  
+      user.username = username;
+      user.email = email;
+  
+      if (password) {
+        user.password = await bcrypt.hash(password, 10);
+      }
+
+      await user.save();
+      res.json({ message: 'Usuari actualitzat amb èxit' });
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
+    }
+  });
 
 router.delete('/delete-user', async (req, res) => {
     try {
