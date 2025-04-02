@@ -15,15 +15,15 @@
         </v-list-item>
       </v-list>
       <div class="pa-2">
-        <v-btn block href="http://localhost:8080/?server=mysql" target="_blank">Adminer</v-btn>
+        <v-btn block href="http://boxheadcontrol.dam.inspedralbes.cat:8080/?server=mysql" target="_blank">Adminer</v-btn>
         <br>
-        <v-btn block href="http://localhost:9000/#!/auth" target="_blank">Microserveis</v-btn>
+        <v-btn block href="http://boxheadcontrol.dam.inspedralbes.cat:9000/#!/auth" target="_blank">Microserveis</v-btn>
         <br>
         <v-btn block color="success" prepend-icon="mdi-download" @click="downloadGame">
           Descargar Videojoc
         </v-btn>
         <br>
-        <v-btn block @click="logout">Tanca sessió</v-btn>
+        <v-btn block color="red" @click="logout">Tanca sessió</v-btn>
       </div>
     </v-navigation-drawer>
 
@@ -61,18 +61,22 @@ const logout = () => {
 
 const downloadGame = async () => {
   try {
-    const response = await fetch(`http://localhost:3002/download/game`)
-    if (!response.ok) throw new Error('Error en la descarga');
+    const response = await fetch(`http://boxheadcontrol.dam.inspedralbes.cat:3002/download/game`);
+    if (!response.ok) alert('Error a la descàrrega');
+    
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.download = 'boxhead-game.zip';
+    document.body.appendChild(link);
     link.click();
-    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+    
+    setTimeout(() => window.URL.revokeObjectURL(url), 100);
   } catch (error) {
-    console.error('Error al descargar:', error);
-    alert('No se pudo descargar el juego');
+    console.error('Error en descarregar:', error);
+    alert("No s'ha pogut descarregar el joc");
   }
 };
 </script>

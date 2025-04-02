@@ -18,10 +18,10 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
-  origin: 'http://localhost:7001',
-  methods: ['GET', 'POST', 'DELETE', 'PUT', 'DOWNLOAD'],
+  origin: 'http://boxheadcontrol.dam.inspedralbes.cat:7001',
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}
+};
 
 app.use(cors(corsOptions));
 
@@ -106,29 +106,32 @@ wss.on("connection", (ws) => {
   });
 });
 
-/*
 app.get('/download/game', (req, res) => {
   try {
-    const filePath = path.join(__dirname, 'uploads/game/boxhead-game.zip'); // Ajusta la ruta
-    res.download(filePath, 'boxhead-game.zip', (err) => {
+    const filePath = path.join(__dirname, 'uploads/game/boxhead-game.zip');
+    console.log("Descarregant fitxer:", filePath);
+    
+    res.setHeader('Content-Disposition', 'attachment; filename="boxhead-game.zip"');
+    res.setHeader('Content-Type', 'application/zip');
+
+    res.download(filePath, (err) => {
       if (err) {
-        console.error('Error al descargar:', err);
-        res.status(500).send('Error al descargar el archivo');
+        console.error('Error en descarregar:', err);
+        res.status(500).send('Error en descarregar el fitxer');
       }
     });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).send('Error interno del servidor');
+    console.error('Error intern:', error);
+    res.status(500).send('Error intern del servidor');
   }
 });
-*/
 
 sequelize
   .sync()
   .then(() => {
     console.log("Base de dades sincronitzada.");
     server.listen(PORT, () => {
-      console.log(`Servidor funcionan en http://localhost:${PORT}`);
+      console.log(`Servidor funcionan en http://boxheadcontrol.dam.inspedralbes.cat:${PORT}`);
     });
   })
   .catch((err) => console.error("Error sincronitzant la base de dades:", err));
