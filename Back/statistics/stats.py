@@ -109,7 +109,6 @@ for email_filter in emails_unicos:
         plt.text(0, -0.1, "* = Partida Modificada", transform=plt.gca().transAxes,
                  fontsize=10, color="black", ha="left", va="bottom")
 
-    # Guardar la imagen
     output_path_anscombe = os.path.join(user_output_dir, "grafica_rounds.png")
     plt.savefig(output_path_anscombe, dpi=300, bbox_inches='tight')
 
