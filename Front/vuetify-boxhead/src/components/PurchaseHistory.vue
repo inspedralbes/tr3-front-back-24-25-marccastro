@@ -14,7 +14,7 @@
   
       <v-data-table v-else :headers="headers" :items="purchases" item-key="id" class="elevation-1">
         <template v-slot:item.image="{ item }">
-            <v-img :src="`http://boxheadcontrol.dam.inspedralbes.cat:3002${item.Skin?.imagePath}`" height="50"></v-img>
+            <v-img :src="`http://localhost:3002${item.Skin?.imagePath}`" height="50"></v-img>
         </template>
         <template v-slot:item.skin="{ item }">
             {{ item.Skin?.name || 'Sense nom' }}
@@ -49,7 +49,7 @@ const headers = [
 
 const fetchPurchases = async () => {
   try {
-    const response = await fetch(`http://boxheadcontrol.dam.inspedralbes.cat:3002/api/purchases`);
+    const response = await fetch(`http://localhost:3002/api/purchases`);
 
     const data = await response.json();
     purchases.value = data;

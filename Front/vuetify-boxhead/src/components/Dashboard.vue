@@ -15,9 +15,9 @@
         </v-list-item>
       </v-list>
       <div class="pa-2">
-        <v-btn block href="http://boxheadcontrol.dam.inspedralbes.cat:8080/?server=mysql" target="_blank">Adminer</v-btn>
+        <v-btn block href="http://localhost:8080/?server=mysql" target="_blank">Adminer</v-btn>
         <br>
-        <v-btn block href="http://boxheadcontrol.dam.inspedralbes.cat:9000/#!/auth" target="_blank">Microserveis</v-btn>
+        <v-btn block href="http://localhost:9000/#!/auth" target="_blank">Microserveis</v-btn>
         <br>
         <v-btn block color="success" prepend-icon="mdi-download" @click="downloadGame">
           Descargar Videojoc
@@ -61,7 +61,7 @@ const logout = () => {
 
 const downloadGame = async () => {
   try {
-    const response = await fetch(`http://boxheadcontrol.dam.inspedralbes.cat:3002/download/game`);
+    const response = await fetch(`http://localhost:3002/download/game`);
     if (!response.ok) alert('Error a la descàrrega');
     
     const blob = await response.blob();

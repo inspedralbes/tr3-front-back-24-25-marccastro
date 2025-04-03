@@ -25,7 +25,7 @@
         <v-row>
           <v-col v-for="(image, index) in images" :key="index" cols="12" md="4">
             <v-card @click="openImage(image)">
-              <v-img :src="`http://boxheadcontrol.dam.inspedralbes.cat:3002${image}`"></v-img>
+              <v-img :src="`http://localhost:3002${image}`"></v-img>
             </v-card>
           </v-col>
         </v-row>
@@ -61,7 +61,7 @@ const fetchStatistics = async () => {
   loading.value = true;
 
   try {
-    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/stats/get-stats', {
+    const response = await fetch('http://localhost:3002/api/stats/get-stats', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const fetchStatistics = async () => {
 };
 
 const openImage = (image) => {
-  selectedImage.value = `http://boxheadcontrol.dam.inspedralbes.cat:3002${image}`;
+  selectedImage.value = `http://localhost:3002${image}`;
   imageDialog.value = true;
 };
 </script>

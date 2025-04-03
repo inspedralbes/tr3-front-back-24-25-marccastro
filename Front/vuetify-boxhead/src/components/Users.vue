@@ -54,7 +54,7 @@ const editedUser = ref({ id: null, username: '', email: '', password: '' });
 
 const fetchUsers = async () => {
   try {
-    const response = await fetch('http://boxheadcontrol.dam.inspedralbes.cat:3002/api/users');
+    const response = await fetch('http://localhost:3002/api/users');
 
     const data = await response.json();
     users.value = data;
@@ -78,7 +78,7 @@ const saveUser = async () => {
   try {
     const userData = { ...editedUser.value };
 
-    const response = await fetch(`http://boxheadcontrol.dam.inspedralbes.cat:3002/api/users/edit-user`, {
+    const response = await fetch(`http://localhost:3002/api/users/edit-user`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData)
@@ -102,7 +102,7 @@ const deleteUser = async (user) => {
   if (!confirm(`¿Estás seguro de que quieres eliminar a ${user.username}?`)) return;
 
   try {
-    const response = await fetch(`http://boxheadcontrol.dam.inspedralbes.cat:3002/api/delete-user`, {
+    const response = await fetch(`http://localhost:3002/api/delete-user`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: user.id })
