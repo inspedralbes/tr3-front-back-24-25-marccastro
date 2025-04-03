@@ -24,7 +24,7 @@ router.post('/register', async (req, res) => {
 
         const existingEmail = await User.findOne({ where: { email } });
         if (existingEmail) {
-            return res.status(401).json({ message: "El correu electrònic ja està en ús" });
+            return res.json({ message: "El correu electrònic ja està en ús" });
         }
 
         const hardPassword = await bcrypt.hash(password, 10);
@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
 
         const user = await User.findOne({ where: { username } });
 
-        if(!user) return res.status(401).json({ message: "No existeix cap usuari amb aquest email." });
+        if(!user) return res.json({ message: "No existeix cap usuari amb aquest email." });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.json({ message: "Usuari o contrasenya incorrecta" });
