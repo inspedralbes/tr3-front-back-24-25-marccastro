@@ -18,7 +18,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 const corsOptions = {
-  origin: 'http://boxheadcontrol.dam.inspedralbes.cat:7001',
+  origin: 'http://localhost:7001',
   methods: ['GET', 'POST', 'DELETE', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
