@@ -106,26 +106,6 @@ wss.on("connection", (ws) => {
   });
 });
 
-app.get('/download/game', (req, res) => {
-  try {
-    const filePath = path.join(__dirname, 'uploads/game/boxhead-game.zip');
-    console.log("Descarregant fitxer:", filePath);
-    
-    res.setHeader('Content-Disposition', 'attachment; filename="boxhead-game.zip"');
-    res.setHeader('Content-Type', 'application/zip');
-
-    res.download(filePath, (err) => {
-      if (err) {
-        console.error('Error en descarregar:', err);
-        res.status(500).send('Error en descarregar el fitxer');
-      }
-    });
-  } catch (error) {
-    console.error('Error intern:', error);
-    res.status(500).send('Error intern del servidor');
-  }
-});
-
 sequelize
   .sync()
   .then(() => {

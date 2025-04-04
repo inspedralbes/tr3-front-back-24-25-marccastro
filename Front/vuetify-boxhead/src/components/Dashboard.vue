@@ -19,7 +19,7 @@
         <br>
         <v-btn block href="http://localhost:9000/#!/auth" target="_blank">Microserveis</v-btn>
         <br>
-        <v-btn block color="success" prepend-icon="mdi-download" @click="downloadGame">
+        <v-btn block color="success" prepend-icon="mdi-download" href="http://boxheadcontrol.dam.inspedralbes.cat:3002/uploads/game/boxhead-game.zip">
           Descargar Videojoc
         </v-btn>
         <br>
@@ -57,26 +57,5 @@ const menuItems = ref([
 const logout = () => {
   localStorage.removeItem('token');
   router.push('/');
-};
-
-const downloadGame = async () => {
-  try {
-    const response = await fetch(`http://localhost:3002/download/game`);
-    if (!response.ok) alert('Error a la descàrrega');
-    
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'boxhead-game.zip';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    setTimeout(() => window.URL.revokeObjectURL(url), 100);
-  } catch (error) {
-    console.error('Error en descarregar:', error);
-    alert("No s'ha pogut descarregar el joc");
-  }
 };
 </script>
