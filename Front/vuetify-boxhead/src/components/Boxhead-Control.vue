@@ -71,77 +71,93 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { functionUpdateEnemy, functionUpdatePlayer, functionSocketRestart } from '../services/socketManager';
+import { ref } from 'vue'; // Importa 'ref' para crear referencias reactivas en Vue
+import { functionUpdateEnemy, functionUpdatePlayer, functionSocketRestart } from '../services/socketManager'; // Importa funciones para manejar la actualización de estadísticas y reinicio de personajes a través de WebSocket
 
-const health = ref(50);
-const speed = ref(5);
-const damage = ref(20);
-const selectedCharacter = ref(null);
-const characters = ref(['Jugador', 'Zombi', 'Zombie Gordo']);
-const save = ref(false);
+// Variables reactivas que mantienen el estado de las características del personaje
+const health = ref(50); // Salud del personaje
+const speed = ref(5); // Velocidad del personaje
+const damage = ref(20); // Daño del personaje
+const selectedCharacter = ref(null); // Personaje seleccionado
+const characters = ref(['Jugador', 'Zombi', 'Zombie Gordo']); // Lista de personajes disponibles
+const save = ref(false); // Indica si la configuración debe guardarse
 
-const colorName = ref('');
-const colorNames = ref(['Blanc', 'Vermell', 'Blau', 'Verd']);
+// Variables para manejar el color del personaje
+const colorName = ref(''); // Color seleccionado
+const colorNames = ref(['Blanc', 'Vermell', 'Blau', 'Verd']); // Lista de colores disponibles
 
+// Función para obtener el nombre adecuado del personaje basado en la selección
 const getCharacter = (character) => {
   switch (character) {
-    case 'Jugador':
+    case 'Jugador': // Si es 'Jugador', retorna 'Player'
       return 'Player'
-    case 'Zombi':
+    case 'Zombi': // Si es 'Zombi', retorna 'Zombie'
       return 'Zombie';
-    case 'Zombi Gordo':
+    case 'Zombi Gordo': // Si es 'Zombi Gordo', retorna 'FatZombie'
       return 'FatZombie';
     default:
-      return 'Player';
+      return 'Player'; // Si no hay coincidencias, por defecto es 'Player'
   }
 }
 
+// Función que devuelve el código hexadecimal del color según la selección
 const getColorHex = (color) => {
   switch (color) {
-    case 'Blanc':
+    case 'Blanc': // Si es 'Blanc', retorna 'FFFFFF' (blanco)
       return 'FFFFFF'
-    case 'Vermell':
+    case 'Vermell': // Si es 'Vermell', retorna 'FF0000' (rojo)
       return 'FF0000';
-    case 'Blau':
+    case 'Blau': // Si es 'Blau', retorna '0000FF' (azul)
       return '0000FF';
-    case 'Verd':
+    case 'Verd': // Si es 'Verd', retorna '008000' (verde)
       return '008000';
     default:
-      return 'FFFFFF';
+      return 'FFFFFF'; // Si no hay coincidencias, por defecto es blanco
   }
 };
 
+// Función que se llama cuando se quiere actualizar las estadísticas del enemigo
 const functionEnemy = () => {
+  // Verifica que haya un personaje seleccionado y un color seleccionado
   if (selectedCharacter.value && colorName.value) {
-    const colorHex = getColorHex(colorName.value);
-    const nameCharacter = getCharacter(selectedCharacter.value);
-    save.value = false;
+    const colorHex = getColorHex(colorName.value); // Obtiene el color hexadecimal
+    const nameCharacter = getCharacter(selectedCharacter.value); // Obtiene el nombre adecuado del personaje
+    save.value = false; // No se está guardando la configuración
 
+    // Llama a la función que actualiza las estadísticas del enemigo
     functionUpdateEnemy(save, nameCharacter, health, speed, damage, colorHex);
   } else {
-    alert("Seleccioneu un personatge i un color.");
+    alert("Seleccioneu un personatge i un color."); // Si falta un personaje o un color, muestra un mensaje
   }
 };
 
+// Función que se llama cuando se quiere actualizar las estadísticas del jugador
 const functionPlayer = () => {
+  // Obtiene el nombre del personaje seleccionado
   const nameCharacter = getCharacter(selectedCharacter.value);
+
+  // Llama a la función que actualiza las estadísticas del jugador
   functionUpdatePlayer(nameCharacter, health, speed);
 }
 
+// Función que guarda la configuración de las estadísticas del personaje
 const saveConfiguration = () => {
+  // Verifica que haya un personaje y color seleccionados
   if (selectedCharacter.value && colorName.value) {
-    const colorHex = getColorHex(colorName.value);
-    const nameCharacter = getCharacter(selectedCharacter.value);
-    save.value = true;
+    const colorHex = getColorHex(colorName.value); // Obtiene el color hexadecimal
+    const nameCharacter = getCharacter(selectedCharacter.value); // Obtiene el nombre adecuado del personaje
+    save.value = true; // Marca que la configuración debe guardarse
     
+    // Llama a la función que actualiza las estadísticas del enemigo
     functionUpdateEnemy(save, nameCharacter, health, speed, damage, colorHex);
   } else {
-    console.error("Seleccioneu un personatge i un color.");
+    console.error("Seleccioneu un personatge i un color."); // Si falta un personaje o color, muestra un error
   }
 };
 
+// Función que reinicia las estadísticas del personaje
 const restartCharacter = () => {
+  // Llama a la función que reinicia las estadísticas a través de WebSocket
   functionSocketRestart(selectedCharacter);
 }
 </script>

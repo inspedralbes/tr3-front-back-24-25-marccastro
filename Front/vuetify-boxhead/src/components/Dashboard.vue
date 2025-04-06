@@ -36,26 +36,27 @@
 </template>
   
 <script setup>
-import { ref } from 'vue';
-import BoxheadControl from './Boxhead-Control.vue';
-import Users from './Users.vue';
-import Skins from './Skins.vue';
-import Statistics from './Statistics.vue';
-import PurchaseHistory from './PurchaseHistory.vue';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'; // Importa 'ref' para crear variables reactivas en Vue
+import BoxheadControl from './Boxhead-Control.vue'; // Importa el componente 'BoxheadControl'
+import Users from './Users.vue'; // Importa el componente 'Users'
+import Skins from './Skins.vue'; // Importa el componente 'Skins'
+import Statistics from './Statistics.vue'; // Importa el componente 'Statistics'
+import PurchaseHistory from './PurchaseHistory.vue'; // Importa el componente 'PurchaseHistory'
+import { useRouter } from 'vue-router'; // Importa el 'useRouter' de Vue Router para navegar entre rutas
 
-const router = useRouter();
-const selectedComponent = ref(BoxheadControl);
-const menuItems = ref([
-  { icon: 'mdi-gamepad-variant', title: 'Boxhead Control', component: BoxheadControl },
-  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins },
-  { icon: 'mdi-account-group', title: 'Usuaris', component: Users },
-  { icon: 'mdi-cash-register', title: 'Historial de Compres', component: PurchaseHistory },
-  { icon: 'mdi-chart-line', title: 'Estadistiques', component: Statistics}
+const router = useRouter(); // Crea una instancia del enrutador de Vue Router
+const selectedComponent = ref(BoxheadControl); // Inicializa la variable reactiva 'selectedComponent' con el componente por defecto (BoxheadControl)
+const menuItems = ref([ // Define una lista de objetos que representan las opciones de menú
+  { icon: 'mdi-gamepad-variant', title: 'Boxhead Control', component: BoxheadControl }, // Opción para seleccionar 'Boxhead Control'
+  { icon: 'mdi-package-variant-closed', title: 'Skins', component: Skins }, // Opción para seleccionar 'Skins'
+  { icon: 'mdi-account-group', title: 'Usuaris', component: Users }, // Opción para seleccionar 'Usuaris'
+  { icon: 'mdi-cash-register', title: 'Historial de Compres', component: PurchaseHistory }, // Opción para seleccionar 'Historial de Compres'
+  { icon: 'mdi-chart-line', title: 'Estadistiques', component: Statistics} // Opción para seleccionar 'Estadistiques'
 ]);
 
+// Función que se llama cuando el usuario hace logout
 const logout = () => {
-  localStorage.removeItem('token');
-  router.push('/');
+  localStorage.removeItem('token'); // Elimina el 'token' de localStorage, desconectando al usuario
+  router.push('/'); // Redirige al usuario a la página de inicio (generalmente la página de login)
 };
 </script>

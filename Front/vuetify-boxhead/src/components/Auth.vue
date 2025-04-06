@@ -53,47 +53,55 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue'; // Importa 'ref' de Vue para crear referencias reactivas
+import { useRouter } from 'vue-router'; // Importa 'useRouter' para navegar entre rutas
 
-const router = useRouter();
-const isLogin = ref(true);
-const username = ref('');
-const email = ref('');
-const password = ref('');
-const confirmPassword = ref('');
-const showPassword = ref(false);
-const valid = ref(false);
-const form = ref(null);
+const router = useRouter(); // Inicializa el enrutador de Vue para redirigir a otras rutas
+const isLogin = ref(true); // Define una referencia reactiva para determinar si el usuario está en la pantalla de login o registro
+const username = ref(''); // Referencia reactiva para el nombre de usuario (solo en registro)
+const email = ref(''); // Referencia reactiva para el correo electrónico
+const password = ref(''); // Referencia reactiva para la contraseña
+const confirmPassword = ref(''); // Referencia reactiva para confirmar la contraseña (solo en registro)
+const showPassword = ref(false); // Controla la visibilidad de la contraseña (si está oculta o visible)
+const valid = ref(false); // Define una referencia para la validez del formulario
+const form = ref(null); // Referencia para el formulario, que se usará para validar el formulario
 
+// Función que maneja el envío del formulario
 const submitForm = async () => {
+  // Si la validación del formulario falla, no hacer nada
   if (!form.value.validate()) return;
 
+  // Define la URL del endpoint según si el usuario está registrándose o iniciando sesión
   const endpoint = isLogin.value
-    ? 'http://localhost:3002/api/users/login/administraction'
-    : 'http://localhost:3002/api/users/register/administraction';
+    ? 'http://localhost:3002/api/users/login/administraction' // URL para iniciar sesión
+    : 'http://localhost:3002/api/users/register/administraction'; // URL para registrarse
 
+  // Prepara los datos del usuario, dependiendo de si es login o registro
   let userData = isLogin.value
-    ? { email: email.value, password: password.value }
-    : { username: username.value, email: email.value, password: password.value };
+    ? { email: email.value, password: password.value } // Solo email y contraseña para login
+    : { username: username.value, email: email.value, password: password.value }; // Username, email y contraseña para registro
 
   try {
+    // Realiza la solicitud HTTP al servidor con los datos del usuario
     const response = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      headers: { 'Content-Type': 'application/json' }, // Establece que el cuerpo de la solicitud será en formato JSON
+      body: JSON.stringify(userData), // Convierte los datos del usuario a JSON
     });
 
+    // Procesa la respuesta del servidor
     const data = await response.json();
 
+    // Si la respuesta es exitosa (código 2xx), guarda el token en localStorage y redirige al dashboard
     if (response.ok) {
-      localStorage.setItem('token', 'Admin');
-      
-      router.push('/dashboard');
+      localStorage.setItem('token', 'Admin'); // Guarda un token de sesión (solo de ejemplo, en producción usarías un token real)
+      router.push('/dashboard'); // Redirige al dashboard
     } else {
+      // Si no es exitosa, muestra un mensaje de error
       alert(data.message || "Error en autenticació");
     }
   } catch (error) {
+    // Si ocurre un error durante la conexión, muestra un mensaje de error
     alert('Hi va haver un problema amb la connexió al servidor.');
   }
 };
