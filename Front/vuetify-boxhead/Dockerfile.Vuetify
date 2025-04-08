@@ -1,0 +1,20 @@
+# Utiliza una imagen base de Node.js para crear el contenedor
+FROM node:18-alpine
+
+# Establecemos el directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiamos los archivos package.json y package-lock.json (si existen)
+COPY package*.json ./
+
+# Instalamos las dependencias de Vue y Vuetify
+RUN npm install
+
+# Copiamos el código fuente de la aplicación al contenedor
+COPY . .
+
+# Exponemos el puerto en el que la aplicación corre (default: 8080)
+EXPOSE 7001
+
+# Comando para iniciar la aplicación en modo de desarrollo
+CMD ["npm", "run", "dev"]
